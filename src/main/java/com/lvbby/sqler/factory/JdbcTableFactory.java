@@ -16,10 +16,11 @@ public class JdbcTableFactory implements TableFactory {
     private DbConnectorConfig dbConnectorConfig;
     Connection conn = null;
 
-
-    public JdbcTableFactory(DbConnectorConfig dbConnectorConfig) {
-        this.dbConnectorConfig = dbConnectorConfig;
-        conn = getConnection();
+    public static JdbcTableFactory create(DbConnectorConfig dbConnectorConfig) {
+        JdbcTableFactory re = new JdbcTableFactory();
+        re.dbConnectorConfig = dbConnectorConfig;
+        re.init();
+        return re;
     }
 
     public List<TableInfo> getTables() {
@@ -35,17 +36,16 @@ public class JdbcTableFactory implements TableFactory {
         return null;
     }
 
-    public Connection getConnection() {
+    public void init() {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             conn = DriverManager.getConnection(
                     dbConnectorConfig.getJdbcUrl(),
                     dbConnectorConfig.getUser(),
                     dbConnectorConfig.getPassword());
-        } catch ( Exception e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        return conn;
     }
 
     private List<String> parseTables() throws SQLException {
@@ -68,17 +68,15 @@ public class JdbcTableFactory implements TableFactory {
                 f.setDbType(rs.getString(5));
                 f.setDbTypeName(rs.getString(6));
                 f.setComment(rs.getString(12));
-                //                for (int i = 1; i < 15; i++) {
-                //                    System.out.println(rs.getString(i));
-                //                }
                 re.add(f);
             }
         } catch (SQLException e) {
-            System.out.println("数据库连接失败:" + e.getMessage());
+            throw new RuntimeException(e);
         }
         return re;
     }
 
+    @Deprecated
     private List<TableField> getFields2(TableInfo tableInfo) {
         List<TableField> re = Lists.newArrayList();
         String sql = String.format("select * from %s limit 1", tableInfo.getName());
@@ -101,7 +99,7 @@ public class JdbcTableFactory implements TableFactory {
                 }
             }
         } catch (SQLException e) {
-            System.out.println("数据库连接失败:" + e.getMessage());
+            throw new RuntimeException(e);
         }
         return re;
     }

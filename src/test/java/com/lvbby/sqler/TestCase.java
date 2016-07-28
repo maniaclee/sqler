@@ -3,8 +3,8 @@ package com.lvbby.sqler;
 import com.google.common.collect.Lists;
 import com.lvbby.sqler.core.DefaultHierarchyTableHandler;
 import com.lvbby.sqler.core.SqlExecutor;
-import com.lvbby.sqler.factory.DDLTableFactory;
 import com.lvbby.sqler.factory.DbConnectorConfig;
+import com.lvbby.sqler.factory.JdbcTableFactory;
 import com.lvbby.sqler.handler.Handlers;
 import com.lvbby.sqler.handler.JavaTypeHandlers;
 import com.lvbby.sqler.handler.OutputHandler;
@@ -64,8 +64,8 @@ public class TestCase {
 
         SqlExecutor sqlExecutor = new SqlExecutor()
                 .setConfig(dbConnectorConfig)
-//                .setTableFactory(new JdbcTableFactory(dbConnectorConfig))
-                .setTableFactory(DDLTableFactory.create(IOUtils.toString(TestCase.class.getClassLoader().getResourceAsStream("testddl.sql"))))
+                .setTableFactory(JdbcTableFactory.create(dbConnectorConfig))
+//                .setTableFactory(DDLTableFactory.create(IOUtils.toString(TestCase.class.getClassLoader().getResourceAsStream("testddl.sql"))))
                 .setTableHandlers(Lists.newArrayList(
 //                        JavaTypeHandlers.necessary,
                         JavaTypeHandlers.basic,
