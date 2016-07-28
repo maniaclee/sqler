@@ -1,10 +1,11 @@
 package com.lvbby.sqler;
 
 import com.google.common.collect.Lists;
+import com.lvbby.sqler.core.DefaultHierarchyTableHandler;
 import com.lvbby.sqler.core.SqlExecutor;
-import com.lvbby.sqler.core.TableFactory;
 import com.lvbby.sqler.handler.Handlers;
 import com.lvbby.sqler.handler.JavaTypeHandlers;
+import com.lvbby.sqler.handler.OutputHandler;
 import com.lvbby.sqler.handler.TemplateEngineHandler;
 import com.lvbby.sqler.jdbc.DbConnectorConfig;
 import com.lvbby.sqler.jdbc.JdbcTableFactory;
@@ -17,6 +18,7 @@ import org.beetl.core.resource.ClasspathResourceLoader;
 import org.beetl.core.resource.StringTemplateResourceLoader;
 import org.junit.Test;
 
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -47,11 +49,6 @@ public class TestCase {
         System.out.println(str);
     }
 
-    @Test
-    public void tee23() throws IOException {
-        BeetlTemplateEngine t = BeetlTemplateEngine.create(IOUtils.toString(TestCase.class.getClassLoader().getResourceAsStream("templates/test.t")));
-        System.out.println(t.render("name", "beetl"));
-    }
 
     @Test
     public void cases() throws IOException {
@@ -62,17 +59,26 @@ public class TestCase {
         dbConnectorConfig.setJdbcUrl(url);
         dbConnectorConfig.setUser(user);
         dbConnectorConfig.setPassword(pass);
+        dbConnectorConfig.setAuthor("maniac.lee");
 
-        TableFactory jdbcTableFactory = new JdbcTableFactory(dbConnectorConfig);
 
-        SqlExecutor sqlExecutor = new SqlExecutor(jdbcTableFactory, Lists.newArrayList(
-                JavaTypeHandlers.instance,
-                JavaTypeHandlers.javaPrimitive2BoxingType,
-                Handlers.print,
-                TemplateEngineHandler.
-                        of(BeetlTemplateEngine.create(IOUtils.toString(TestCase.class.getClassLoader().getResourceAsStream("templates/javabean.t"))))
-                        .setRootKey("c")
-        ));
+        String beanTemplate = IOUtils.toString(TestCase.class.getClassLoader().getResourceAsStream("templates/JavaBean.btl"));
+        SqlExecutor sqlExecutor = new SqlExecutor()
+                .setConfig(dbConnectorConfig)
+                .setTableFactory(new JdbcTableFactory(dbConnectorConfig))
+                .setTableHandlers(Lists.newArrayList(
+                        JavaTypeHandlers.necessary,
+//                        JavaTypeHandlers.boxingType,
+                        Handlers.fieldCase,
+//                        Handlers.print,
+                        DefaultHierarchyTableHandler
+                                .of(TemplateEngineHandler.
+                                        of(BeetlTemplateEngine.create(beanTemplate))
+                                        .bind("className", context -> context.getTableInfo().getName() + "Entity"))
+                                .addChild(OutputHandler.create()
+                                        .setDestDir(new File("/Users/peng/tmp/gen/entity"))
+                                        .setFileNameConverter(context -> context.getTableInfo().getName() + "Entity.java"))
+                ));
         sqlExecutor.run();
     }
 

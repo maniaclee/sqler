@@ -7,8 +7,6 @@ import org.beetl.core.Template;
 import org.beetl.core.resource.StringTemplateResourceLoader;
 
 import java.io.IOException;
-import java.io.OutputStream;
-import java.util.Map;
 
 /**
  * Created by lipeng on 16/7/28.
@@ -33,19 +31,14 @@ public class BeetlTemplateEngine implements TemplateEngine {
     }
 
     @Override
-    public String render(String key, Object obj) {
+    public void bind(String key, Object obj) {
         t.binding(key, obj);
-        return t.render();
     }
 
     @Override
-    public String render(Map obj) {
-        t.binding(obj);
+    public String render() {
         return t.render();
     }
 
-    @Override
-    public void renderTo(OutputStream outputStream) {
-        t.renderTo(outputStream);
-    }
+
 }

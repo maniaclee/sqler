@@ -5,6 +5,7 @@ import com.lvbby.sqler.core.Context;
 import com.lvbby.sqler.core.TableField;
 import com.lvbby.sqler.core.TableHandler;
 import com.lvbby.sqler.core.TableInfo;
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
 import java.util.Map;
 
@@ -20,7 +21,7 @@ public class Handlers {
         void handle(TableField f);
     }
 
-    public static final TableHandler<Context> print = s -> System.out.println(s);
+    public static final TableHandler<Context> print = s -> System.out.println(ReflectionToStringBuilder.toString(s));
 
     public static final TableHandler<Context> fieldCase = ofField(s -> s.setName(CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, s.getName())));
 

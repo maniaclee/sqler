@@ -9,21 +9,21 @@ import java.util.List;
  * Created by peng on 16/7/27.
  */
 public class TableInfo {
-    String tableName;
+    String name;
     List<TableField> fields;
 
     public static TableInfo instance(String table) {
         TableInfo tableInfo = new TableInfo();
-        tableInfo.setTableName(table);
+        tableInfo.setName(table);
         return tableInfo;
     }
 
-    public String getTableName() {
-        return tableName;
+    public String getName() {
+        return name;
     }
 
-    public void setTableName(String tableName) {
-        this.tableName = tableName;
+    public void setName(String tableName) {
+        this.name = tableName;
     }
 
     public List<TableField> getFields() {

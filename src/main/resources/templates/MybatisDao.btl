@@ -1,0 +1,22 @@
+package ${config.pack};
+
+/**
+ * Created by ${config.author} on ${date(),"yyyy-MM-dd"} .
+ */
+public interface ${lee.capital(className)} {
+}
+
+
+public interface UserDetailMapper{
+
+    UserDetail findOne(Long id);
+
+    List<UserDetail> find(List<Long> ids);
+
+    Long insert(UserDetail userDetail);
+
+    void update(UserDetail userDetail);
+
+    void delete(Long id);
+
+}

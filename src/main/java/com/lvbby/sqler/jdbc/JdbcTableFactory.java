@@ -63,7 +63,7 @@ public class JdbcTableFactory implements TableFactory {
         List<TableField> re = Lists.newArrayList();
         try {
             DatabaseMetaData meta = conn.getMetaData();
-            ResultSet rs = meta.getColumns(null, null, tableInfo.getTableName(), "%");
+            ResultSet rs = meta.getColumns(null, null, tableInfo.getName(), "%");
             while (rs.next()) {
                 TableField f = new TableField();
                 f.setName(rs.getString(4));
@@ -83,7 +83,7 @@ public class JdbcTableFactory implements TableFactory {
 
     private List<TableField> getFields2(TableInfo tableInfo) {
         List<TableField> re = Lists.newArrayList();
-        String sql = String.format("select * from %s limit 1", tableInfo.getTableName());
+        String sql = String.format("select * from %s limit 1", tableInfo.getName());
         PreparedStatement stmt;
         try {
             stmt = conn.prepareStatement(sql);

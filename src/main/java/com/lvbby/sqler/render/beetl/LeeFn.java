@@ -1,6 +1,6 @@
 package com.lvbby.sqler.render.beetl;
 
-import com.google.common.base.CaseFormat;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Created by lipeng on 16/7/28.
@@ -8,7 +8,7 @@ import com.google.common.base.CaseFormat;
 public class LeeFn {
 
     public String capital(String s) {
-        return CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, s);
+        return StringUtils.capitalize(s);
     }
 
 }

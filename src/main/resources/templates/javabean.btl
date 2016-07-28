@@ -1,0 +1,27 @@
+package ${config.pack};
+
+import java.io.Serializable;
+import java.util.Date;
+
+/**
+ * Created by ${config.author} on ${date(),"yyyy-MM-dd"} .
+ */
+public class ${lee.capital(className)} implements Serializable {
+    private static final long serialVersionUID = -1;
+
+    <% for(f in table.fields){ %>
+    /* ${f.comment} */
+    private ${f.appType} ${f.name};
+    <%}%>
+
+	<% for(f in table.fields){ %>
+    public ${f.appType} get${lee.capital(f.name)}() {
+        return ${f.name};
+    }
+
+    public void set${lee.capital(f.name)}(${f.appType} ${f.name}) {
+        this.${f.name} = ${f.name};
+    }
+
+     <%}%>
+}

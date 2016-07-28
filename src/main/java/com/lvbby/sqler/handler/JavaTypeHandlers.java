@@ -32,11 +32,17 @@ public class JavaTypeHandlers {
     }};
 
 
-    public static TableHandler instance = Handlers.ofField(field -> standardType.keySet().stream().
+    /***
+     * convert jdbc type 2 java type @see Types
+     */
+    public static TableHandler necessary = Handlers.ofField(field -> standardType.keySet().stream().
             filter(s -> standardType.get(s).contains(field.getDbType())).
             forEach(field::setAppType));
 
-    public static TableHandler javaPrimitive2BoxingType = Handlers.ofField(f -> {
+    /**
+     * to boxing type like int -> Integer
+     */
+    public static TableHandler boxingType = Handlers.ofField(f -> {
         if (map.containsKey(f.getAppType()))
             f.setAppType(map.get(f.getAppType()));
     });
