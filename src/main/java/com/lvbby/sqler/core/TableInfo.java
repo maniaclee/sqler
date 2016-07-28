@@ -1,5 +1,6 @@
 package com.lvbby.sqler.core;
 
+import com.google.common.collect.Lists;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -10,7 +11,7 @@ import java.util.List;
  */
 public class TableInfo {
     String name;
-    List<TableField> fields;
+    List<TableField> fields = Lists.newLinkedList();
 
     public static TableInfo instance(String table) {
         TableInfo tableInfo = new TableInfo();

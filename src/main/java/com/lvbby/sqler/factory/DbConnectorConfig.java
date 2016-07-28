@@ -1,4 +1,4 @@
-package com.lvbby.sqler.jdbc;
+package com.lvbby.sqler.factory;
 
 import com.lvbby.sqler.core.Config;
 import org.apache.commons.lang3.StringUtils;
@@ -17,7 +17,7 @@ public class DbConnectorConfig extends Config {
     @Override
     public void check() throws IllegalArgumentException {
         super.check();
-        doCheck(StringUtils.isNoneBlank(jdbcUrl), "jdbc is empty");
+        doCheck(StringUtils.isNoneBlank(jdbcUrl), "factory is empty");
         doCheck(StringUtils.isNoneBlank(user), "user is empty");
         if (StringUtils.isBlank(password))
             password = "";

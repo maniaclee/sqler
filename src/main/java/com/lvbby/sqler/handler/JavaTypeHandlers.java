@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 /**
  * Created by peng on 16/7/27.
- * Convert jdbc type to java type
+ * Convert factory type to java type
  */
 public class JavaTypeHandlers {
     static ArrayListMultimap<String, String> standardType = ArrayListMultimap.create();
@@ -33,11 +33,13 @@ public class JavaTypeHandlers {
 
 
     /***
-     * convert jdbc type 2 java type @see Types
+     * convert factory type 2 java type @see Types
      */
     public static TableHandler necessary = Handlers.ofField(field -> standardType.keySet().stream().
             filter(s -> standardType.get(s).contains(field.getDbType())).
             forEach(field::setAppType));
+
+    public static TableHandler basic = Handlers.ofField(f -> f.setAppType(calDbTypeByName(f.getDbTypeName())));
 
     /**
      * to boxing type like int -> Integer
@@ -50,6 +52,25 @@ public class JavaTypeHandlers {
 
     private static void putAll(String k, List<Integer> list) {
         standardType.putAll(k, list.stream().map(s -> String.valueOf(s)).collect(Collectors.toList()));
+    }
+
+    private static String calDbTypeByName(String type) {
+        type = type.toLowerCase();
+        if (type.equals("bigint"))
+            return "long";
+        if (type.contains("int"))
+            return "int";
+        if (type.contains("char") || type.contains("text"))
+            return "String";
+        if (type.contains("float"))
+            return "float";
+        if (type.contains("date") || type.contains("time"))
+            return "Date";
+        if (type.contains("decimal"))
+            return "BigDecimal";
+        if (type.contains("double"))
+            return "double";
+        throw new IllegalArgumentException("unknown type : " + type);
     }
 
 }

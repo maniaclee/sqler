@@ -24,6 +24,7 @@ public class Handlers {
     public static final TableHandler<Context> print = s -> System.out.println(ReflectionToStringBuilder.toString(s));
 
     public static final TableHandler<Context> fieldCase = ofField(s -> s.setName(CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, s.getName())));
+    public static final TableHandler<Context> tableCase = ofTable(s -> s.setName(CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, s.getName())));
 
     public static TableHandler ofField(SimpleFieldHandler simpleFieldHandler) {
         return context -> context.getTableInfo().getFields().stream().forEach(f -> simpleFieldHandler.handle(f));

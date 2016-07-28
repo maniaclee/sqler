@@ -3,12 +3,12 @@ package com.lvbby.sqler;
 import com.google.common.collect.Lists;
 import com.lvbby.sqler.core.DefaultHierarchyTableHandler;
 import com.lvbby.sqler.core.SqlExecutor;
+import com.lvbby.sqler.factory.DDLTableFactory;
+import com.lvbby.sqler.factory.DbConnectorConfig;
 import com.lvbby.sqler.handler.Handlers;
 import com.lvbby.sqler.handler.JavaTypeHandlers;
 import com.lvbby.sqler.handler.OutputHandler;
 import com.lvbby.sqler.handler.TemplateEngineHandler;
-import com.lvbby.sqler.jdbc.DbConnectorConfig;
-import com.lvbby.sqler.jdbc.JdbcTableFactory;
 import com.lvbby.sqler.render.beetl.BeetlTemplateEngine;
 import org.apache.commons.io.IOUtils;
 import org.beetl.core.Configuration;
@@ -62,18 +62,20 @@ public class TestCase {
         dbConnectorConfig.setAuthor("maniac.lee");
 
 
-        String beanTemplate = IOUtils.toString(TestCase.class.getClassLoader().getResourceAsStream("templates/JavaBean.btl"));
         SqlExecutor sqlExecutor = new SqlExecutor()
                 .setConfig(dbConnectorConfig)
-                .setTableFactory(new JdbcTableFactory(dbConnectorConfig))
+//                .setTableFactory(new JdbcTableFactory(dbConnectorConfig))
+                .setTableFactory(DDLTableFactory.create(IOUtils.toString(TestCase.class.getClassLoader().getResourceAsStream("testddl.sql"))))
                 .setTableHandlers(Lists.newArrayList(
-                        JavaTypeHandlers.necessary,
-//                        JavaTypeHandlers.boxingType,
+//                        JavaTypeHandlers.necessary,
+                        JavaTypeHandlers.basic,
+                        JavaTypeHandlers.boxingType,
+                        Handlers.tableCase,
                         Handlers.fieldCase,
 //                        Handlers.print,
                         DefaultHierarchyTableHandler
                                 .of(TemplateEngineHandler.
-                                        of(BeetlTemplateEngine.create(beanTemplate))
+                                        of(BeetlTemplateEngine.create(IOUtils.toString(TestCase.class.getClassLoader().getResourceAsStream("templates/JavaBean.btl"))))
                                         .bind("className", context -> context.getTableInfo().getName() + "Entity"))
                                 .addChild(OutputHandler.create()
                                         .setDestDir(new File("/Users/peng/tmp/gen/entity"))

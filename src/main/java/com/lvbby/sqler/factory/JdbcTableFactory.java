@@ -1,4 +1,4 @@
-package com.lvbby.sqler.jdbc;
+package com.lvbby.sqler.factory;
 
 import com.google.common.collect.Lists;
 import com.lvbby.sqler.core.TableFactory;
@@ -42,10 +42,8 @@ public class JdbcTableFactory implements TableFactory {
                     dbConnectorConfig.getJdbcUrl(),
                     dbConnectorConfig.getUser(),
                     dbConnectorConfig.getPassword());
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch ( Exception e) {
+            throw new RuntimeException(e);
         }
         return conn;
     }
