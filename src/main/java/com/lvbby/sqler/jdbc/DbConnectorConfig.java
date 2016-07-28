@@ -1,6 +1,6 @@
-package com.lvbby.mybatisy.jdbc;
+package com.lvbby.sqler.jdbc;
 
-import com.lvbby.mybatisy.core.Config;
+import com.lvbby.sqler.core.Config;
 
 /**
  * Created by peng on 16/7/27.

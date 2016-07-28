@@ -1,7 +1,7 @@
-package com.lvbby.mybatisy.javabean;
+package com.lvbby.sqler.javabean;
 
-import com.lvbby.mybatisy.core.TableHandler;
-import com.lvbby.mybatisy.core.TableInfo;
+import com.lvbby.sqler.core.TableHandler;
+import com.lvbby.sqler.core.TableInfo;
 
 /**
  * Created by peng on 16/7/28.

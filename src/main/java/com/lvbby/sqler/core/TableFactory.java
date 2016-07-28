@@ -1,4 +1,4 @@
-package com.lvbby.mybatisy.core;
+package com.lvbby.sqler.core;
 
 import java.util.List;
 

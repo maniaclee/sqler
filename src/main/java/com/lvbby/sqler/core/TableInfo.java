@@ -1,4 +1,4 @@
-package com.lvbby.mybatisy.core;
+package com.lvbby.sqler.core;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;

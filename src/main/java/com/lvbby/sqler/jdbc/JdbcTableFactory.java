@@ -1,11 +1,11 @@
-package com.lvbby.mybatisy.jdbc;
+package com.lvbby.sqler.jdbc;
 
 import com.google.common.collect.Lists;
-import com.lvbby.mybatisy.core.SqlExecutor;
-import com.lvbby.mybatisy.core.TableFactory;
-import com.lvbby.mybatisy.core.TableField;
-import com.lvbby.mybatisy.core.TableInfo;
-import com.lvbby.mybatisy.handler.PrintHandler;
+import com.lvbby.sqler.core.SqlExecutor;
+import com.lvbby.sqler.core.TableFactory;
+import com.lvbby.sqler.core.TableField;
+import com.lvbby.sqler.core.TableInfo;
+import com.lvbby.sqler.handler.PrintHandler;
 import org.junit.Test;
 
 import java.sql.*;

@@ -1,10 +1,10 @@
-package com.lvbby.mybatisy.jdbc;
+package com.lvbby.sqler.jdbc;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Lists;
-import com.lvbby.mybatisy.core.TableField;
-import com.lvbby.mybatisy.core.TableHandler;
-import com.lvbby.mybatisy.core.TableInfo;
+import com.lvbby.sqler.core.TableField;
+import com.lvbby.sqler.core.TableHandler;
+import com.lvbby.sqler.core.TableInfo;
 import org.apache.commons.collections.CollectionUtils;
 import org.junit.Test;
 
