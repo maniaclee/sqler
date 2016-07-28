@@ -24,6 +24,6 @@ public class TemplateEngineHandler implements TableHandler<Context> {
 
     @Override
     public void handle(Context context) {
-        templateEngine.render(rootKey, context);
+        System.out.println(templateEngine.render(rootKey, context));
     }
 }

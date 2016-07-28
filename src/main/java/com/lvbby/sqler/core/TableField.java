@@ -1,5 +1,7 @@
 package com.lvbby.sqler.core;
 
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+
 /**
  * Created by peng on 16/7/27.
  */
@@ -8,6 +10,7 @@ public class TableField {
     private String appType;
     private String  dbType;
     private String dbTypeName;
+    private String comment;
 
     public String getName() {
         return name;
@@ -41,12 +44,16 @@ public class TableField {
         this.dbTypeName = dbTypeName;
     }
 
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
     @Override
     public String toString() {
-        return "TableField{" +
-                "name='" + name + '\'' +
-                ", appType='" + appType + '\'' +
-                ", dbType='" + dbType + '\'' +
-                '}';
+        return ReflectionToStringBuilder.toString(this);
     }
 }

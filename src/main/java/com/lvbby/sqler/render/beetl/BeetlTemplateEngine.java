@@ -1,5 +1,6 @@
-package com.lvbby.sqler.render;
+package com.lvbby.sqler.render.beetl;
 
+import com.lvbby.sqler.render.TemplateEngine;
 import org.beetl.core.Configuration;
 import org.beetl.core.GroupTemplate;
 import org.beetl.core.Template;
@@ -21,7 +22,7 @@ public class BeetlTemplateEngine implements TemplateEngine {
         try {
             Configuration cfg = Configuration.defaultConfiguration();
             GroupTemplate gt = new GroupTemplate(resourceLoader, cfg);
-            t = gt.getTemplate("hello,${name}");
+            t = gt.getTemplate(context);
         } catch (IOException e) {
             throw new RuntimeException("error create template ", e);
         }

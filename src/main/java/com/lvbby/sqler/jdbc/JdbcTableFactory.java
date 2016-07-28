@@ -69,6 +69,10 @@ public class JdbcTableFactory implements TableFactory {
                 f.setName(rs.getString(4));
                 f.setDbType(rs.getString(5));
                 f.setDbTypeName(rs.getString(6));
+                f.setComment(rs.getString(12));
+                //                for (int i = 1; i < 15; i++) {
+                //                    System.out.println(rs.getString(i));
+                //                }
                 re.add(f);
             }
         } catch (SQLException e) {
