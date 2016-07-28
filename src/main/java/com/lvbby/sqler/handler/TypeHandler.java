@@ -39,7 +39,7 @@ public class TypeHandler implements TableHandler<Context> {
         put("Integer", "int");
         put("Float", "float");
     }});
-    public static TypeHandler primitive2BoxingType = new TypeHandler(new HashMap<String, String>() {{
+    public static TypeHandler javaPrimitive2BoxingType = new TypeHandler(new HashMap<String, String>() {{
         put("long", "Long");
         put("int", "Integer");
         put("float", "Float");

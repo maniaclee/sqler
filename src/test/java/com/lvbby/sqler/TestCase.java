@@ -1,5 +1,14 @@
 package com.lvbby.sqler;
 
+import com.google.common.collect.Lists;
+import com.lvbby.sqler.core.SqlExecutor;
+import com.lvbby.sqler.core.TableFactory;
+import com.lvbby.sqler.handler.JavaTypeHandler;
+import com.lvbby.sqler.handler.PrintHandler;
+import com.lvbby.sqler.handler.TemplateEngineHandler;
+import com.lvbby.sqler.handler.TypeHandler;
+import com.lvbby.sqler.jdbc.DbConnectorConfig;
+import com.lvbby.sqler.jdbc.JdbcTableFactory;
 import com.lvbby.sqler.render.BeetlTemplateEngine;
 import org.apache.commons.io.IOUtils;
 import org.beetl.core.Configuration;
@@ -44,4 +53,29 @@ public class TestCase {
         BeetlTemplateEngine t = BeetlTemplateEngine.create(IOUtils.toString(TestCase.class.getClassLoader().getResourceAsStream("templates/test.t")));
         System.out.println(t.render("name", "beetl"));
     }
+
+    @Test
+    public void cases() throws IOException {
+        String url = "jdbc:mysql://localhost:3306/user";
+        String user = "root";
+        String pass = "";
+        DbConnectorConfig dbConnectorConfig = new DbConnectorConfig();
+        dbConnectorConfig.setJdbcUrl(url);
+        dbConnectorConfig.setUser(user);
+        dbConnectorConfig.setPassword(pass);
+
+        TableFactory jdbcTableFactory = new JdbcTableFactory(dbConnectorConfig);
+
+        SqlExecutor sqlExecutor = new SqlExecutor(jdbcTableFactory, Lists.newArrayList(
+                JavaTypeHandler.instance,
+                TypeHandler.javaPrimitive2BoxingType,
+                PrintHandler.instance,
+                TemplateEngineHandler.
+                        of(BeetlTemplateEngine.create(IOUtils.toString(TestCase.class.getClassLoader().getResourceAsStream("templates/test.t"))))
+                        .setRootKey("c")
+        ));
+        sqlExecutor.run();
+    }
+
+
 }

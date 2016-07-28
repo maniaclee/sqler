@@ -9,15 +9,21 @@ import com.lvbby.sqler.render.TemplateEngine;
  */
 public class TemplateEngineHandler implements TableHandler<Context> {
     private TemplateEngine templateEngine;
+    private String rootKey = "c";
 
-    public static TableHandler of(TemplateEngine templateEngine) {
+    public static TemplateEngineHandler of(TemplateEngine templateEngine) {
         TemplateEngineHandler templateEngineHandler = new TemplateEngineHandler();
         templateEngineHandler.templateEngine = templateEngine;
         return templateEngineHandler;
     }
 
+    public TemplateEngineHandler setRootKey(String rootKey) {
+        this.rootKey = rootKey;
+        return this;
+    }
+
     @Override
     public void handle(Context context) {
-        templateEngine.render("c", context);
+        templateEngine.render(rootKey, context);
     }
 }

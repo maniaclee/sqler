@@ -1,14 +1,9 @@
 package com.lvbby.sqler.jdbc;
 
 import com.google.common.collect.Lists;
-import com.lvbby.sqler.core.SqlExecutor;
 import com.lvbby.sqler.core.TableFactory;
 import com.lvbby.sqler.core.TableField;
 import com.lvbby.sqler.core.TableInfo;
-import com.lvbby.sqler.handler.JavaTypeHandler;
-import com.lvbby.sqler.handler.PrintHandler;
-import com.lvbby.sqler.handler.TypeHandler;
-import org.junit.Test;
 
 import java.sql.*;
 import java.util.List;
@@ -22,9 +17,10 @@ public class JdbcTableFactory implements TableFactory {
     Connection conn = null;
 
 
-    //    public JdbcTableFactory(DbConnectorConfig dbConnectorConfig) {
-    //        this.dbConnectorConfig = dbConnectorConfig;
-    //    }
+    public JdbcTableFactory(DbConnectorConfig dbConnectorConfig) {
+        this.dbConnectorConfig = dbConnectorConfig;
+        conn = getConnection();
+    }
 
     public List<TableInfo> getTables() {
         try {
@@ -39,33 +35,13 @@ public class JdbcTableFactory implements TableFactory {
         return null;
     }
 
-    @Test
-    public void init() throws SQLException {
-        conn = getConnection();
-        SqlExecutor sqlExecutor = new SqlExecutor(this, Lists.newArrayList(
-                //                TypeHandler.ClassName2PrimiveHandler,
-                //                TypeHandler.FullClassName2ClassNameHandler,
-                JavaTypeHandler.instance,
-                TypeHandler.primitive2BoxingType,
-                new PrintHandler()));
-        sqlExecutor.run();
-        //        try {
-        //            Class<?> aClass = Class.forName("java.lang.Integer");
-        //            System.out.println(aClass.isPrimitive());
-        //        } catch (ClassNotFoundException e) {
-        //            e.printStackTrace();
-        //        }
-
-    }
-
-
     public Connection getConnection() {
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            String url = "jdbc:mysql://localhost:3306/user";
-            String user = "root";
-            String pass = "";
-            conn = DriverManager.getConnection(url, user, pass);
+            conn = DriverManager.getConnection(
+                    dbConnectorConfig.getJdbcUrl(),
+                    dbConnectorConfig.getUser(),
+                    dbConnectorConfig.getPassword());
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (SQLException e) {
@@ -79,6 +55,25 @@ public class JdbcTableFactory implements TableFactory {
         ResultSet rs = md.getTables(null, null, "%", null);
         List<String> re = Lists.newArrayList();
         while (rs.next()) re.add(rs.getString(3));
+        return re;
+    }
+
+
+    private List<TableField> getFields(TableInfo tableInfo) {
+        List<TableField> re = Lists.newArrayList();
+        try {
+            DatabaseMetaData meta = conn.getMetaData();
+            ResultSet rs = meta.getColumns(null, null, tableInfo.getTableName(), "%");
+            while (rs.next()) {
+                TableField f = new TableField();
+                f.setName(rs.getString(4));
+                f.setDbType(rs.getString(5));
+                f.setDbTypeName(rs.getString(6));
+                re.add(f);
+            }
+        } catch (SQLException e) {
+            System.out.println("数据库连接失败:" + e.getMessage());
+        }
         return re;
     }
 
@@ -102,24 +97,6 @@ public class JdbcTableFactory implements TableFactory {
                     f.setAppType(columnClassName);
                     re.add(f);
                 }
-            }
-        } catch (SQLException e) {
-            System.out.println("数据库连接失败:" + e.getMessage());
-        }
-        return re;
-    }
-
-    private List<TableField> getFields(TableInfo tableInfo) {
-        List<TableField> re = Lists.newArrayList();
-        try {
-            DatabaseMetaData meta = conn.getMetaData();
-            ResultSet rs = meta.getColumns(null, null, tableInfo.getTableName(), "%");
-            while (rs.next()) {
-                TableField f = new TableField();
-                f.setName(rs.getString(4));
-                f.setDbType(rs.getString(5));
-                f.setDbTypeName(rs.getString(6));
-                re.add(f);
             }
         } catch (SQLException e) {
             System.out.println("数据库连接失败:" + e.getMessage());
