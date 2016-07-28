@@ -7,25 +7,26 @@ import java.util.List;
 /**
  * Created by peng on 16/7/28.
  */
-public class DefaultHierarchyTableHandler<T extends Context> implements HierarchyTableHandler<T> {
+public class DefaultHierarchyTableHandler implements HierarchyTableHandler {
     private List<TableHandler> tableHandlers = Lists.newLinkedList();
 
-    private TableHandler<T> holder;
+    private TableHandler holder;
 
-    public static <T extends Context> DefaultHierarchyTableHandler<T> create() {
+    public static DefaultHierarchyTableHandler create() {
         return of(null);
     }
 
-    public static <T extends Context> DefaultHierarchyTableHandler<T> of(TableHandler<T> holder) {
-        DefaultHierarchyTableHandler<T> re = new DefaultHierarchyTableHandler<>();
+    public static DefaultHierarchyTableHandler of(TableHandler holder) {
+        DefaultHierarchyTableHandler re = new DefaultHierarchyTableHandler();
         re.holder = holder;
         return re;
     }
 
 
     @Override
-    public void addNext(TableHandler<T> t) {
+    public DefaultHierarchyTableHandler addNext(TableHandler t) {
         tableHandlers.add(t);
+        return this;
     }
 
     @Override
@@ -34,14 +35,10 @@ public class DefaultHierarchyTableHandler<T extends Context> implements Hierarch
     }
 
     @Override
-    public void handle(T context) {
+    public void handle(Context context) {
         if (holder != null)
             holder.handle(context);
         tableHandlers.forEach(s -> s.handle(context));
     }
 
-    public DefaultHierarchyTableHandler addChild(TableHandler tableHandler) {
-        addNext(tableHandler);
-        return this;
-    }
 }

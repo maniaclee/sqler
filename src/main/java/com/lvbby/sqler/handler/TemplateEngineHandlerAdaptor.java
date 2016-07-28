@@ -12,18 +12,17 @@ import java.util.Map;
 /**
  * Created by lipeng on 16/7/28.
  */
-public class TemplateEngineHandler implements TableHandler<Context> {
+public class TemplateEngineHandlerAdaptor implements TableHandler {
     private TemplateEngine templateEngine;
     private Map<String, ContextConverter> handlerMap = Maps.newHashMap();
 
-    public static TemplateEngineHandler of(TemplateEngine templateEngine) {
-        TemplateEngineHandler templateEngineHandler = new TemplateEngineHandler();
-        templateEngineHandler.templateEngine = templateEngine;
-        return templateEngineHandler;
+    public static TemplateEngineHandlerAdaptor of(TemplateEngine templateEngine) {
+        TemplateEngineHandlerAdaptor templateEngineHandlerAdaptor = new TemplateEngineHandlerAdaptor();
+        templateEngineHandlerAdaptor.templateEngine = templateEngine;
+        return templateEngineHandlerAdaptor;
     }
 
-
-    public TemplateEngineHandler bind(String key, ContextConverter tableHandler) {
+    public TemplateEngineHandlerAdaptor bind(String key, ContextConverter tableHandler) {
         handlerMap.put(key, tableHandler);
         return this;
     }

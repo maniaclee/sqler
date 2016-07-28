@@ -8,7 +8,7 @@ import com.lvbby.sqler.factory.DbConnectorConfig;
 import com.lvbby.sqler.handler.Handlers;
 import com.lvbby.sqler.handler.JavaTypeHandlers;
 import com.lvbby.sqler.handler.OutputHandler;
-import com.lvbby.sqler.handler.TemplateEngineHandler;
+import com.lvbby.sqler.handler.TemplateEngineHandlerAdaptor;
 import com.lvbby.sqler.render.beetl.BeetlTemplateEngine;
 import org.apache.commons.io.IOUtils;
 import org.beetl.core.Configuration;
@@ -74,10 +74,10 @@ public class TestCase {
                         Handlers.fieldCase,
 //                        Handlers.print,
                         DefaultHierarchyTableHandler
-                                .of(TemplateEngineHandler.
+                                .of(TemplateEngineHandlerAdaptor.
                                         of(BeetlTemplateEngine.create(IOUtils.toString(TestCase.class.getClassLoader().getResourceAsStream("templates/JavaBean.btl"))))
                                         .bind("className", context -> context.getTableInfo().getName() + "Entity"))
-                                .addChild(OutputHandler.create()
+                                .addNext(OutputHandler.create()
                                         .setDestDir(new File("/Users/peng/tmp/gen/entity"))
                                         .setFileNameConverter(context -> context.getTableInfo().getName() + "Entity.java"))
                 ));
