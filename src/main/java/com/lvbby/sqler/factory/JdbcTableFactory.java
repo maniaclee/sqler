@@ -16,6 +16,9 @@ public class JdbcTableFactory implements TableFactory {
     private DbConnectorConfig dbConnectorConfig;
     Connection conn = null;
 
+    private JdbcTableFactory() {
+    }
+
     public static JdbcTableFactory create(DbConnectorConfig dbConnectorConfig) {
         JdbcTableFactory re = new JdbcTableFactory();
         re.dbConnectorConfig = dbConnectorConfig;
