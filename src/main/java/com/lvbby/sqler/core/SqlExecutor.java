@@ -24,8 +24,11 @@ public class SqlExecutor {
         }
         if (CollectionUtils.isNotEmpty(tableHandlers)) {
             for (TableInfo table : tables)
-                for (TableHandler tableHandler : tableHandlers)
-                    tableHandler.handle(table);
+                for (TableHandler tableHandler : tableHandlers) {
+                    Context context = new Context();
+                    context.setTableInfo(table);
+                    tableHandler.handle(context);
+                }
         }
     }
 

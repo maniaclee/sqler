@@ -2,6 +2,7 @@ package com.lvbby.sqler.jdbc;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Lists;
+import com.lvbby.sqler.core.Context;
 import com.lvbby.sqler.core.TableField;
 import com.lvbby.sqler.core.TableHandler;
 import com.lvbby.sqler.core.TableInfo;
@@ -15,7 +16,7 @@ import java.util.stream.Collectors;
 /**
  * Created by peng on 16/7/27.
  */
-public class JdbcTypeHandler implements TableHandler {
+public class JdbcTypeHandler implements TableHandler<Context> {
     static ArrayListMultimap<String, String> standardType = ArrayListMultimap.create();
     public static JdbcTypeHandler instance = new JdbcTypeHandler();
 
@@ -33,7 +34,8 @@ public class JdbcTypeHandler implements TableHandler {
     }
 
     @Override
-    public void handle(TableInfo tableInfo) {
+    public void handle(Context context) {
+        TableInfo tableInfo = context.getTableInfo();
         List<TableField> fields = tableInfo.getFields();
         if (CollectionUtils.isNotEmpty(fields))
             for (TableField field : fields) {

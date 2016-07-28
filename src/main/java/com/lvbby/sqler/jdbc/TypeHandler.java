@@ -1,5 +1,6 @@
 package com.lvbby.sqler.jdbc;
 
+import com.lvbby.sqler.core.Context;
 import com.lvbby.sqler.core.TableField;
 import com.lvbby.sqler.core.TableHandler;
 import com.lvbby.sqler.core.TableInfo;
@@ -12,7 +13,7 @@ import java.util.Map;
 /**
  * Created by peng on 16/7/27.
  */
-public class TypeHandler implements TableHandler {
+public class TypeHandler implements TableHandler<Context> {
     Map<String, String> map;
 
 
@@ -45,7 +46,8 @@ public class TypeHandler implements TableHandler {
     }});
 
     @Override
-    public void handle(TableInfo tableInfo) {
+    public void handle(Context context) {
+        TableInfo tableInfo = context.getTableInfo();
         List<TableField> fields = tableInfo.getFields();
         if (CollectionUtils.isNotEmpty(fields))
             for (TableField field : fields) {
