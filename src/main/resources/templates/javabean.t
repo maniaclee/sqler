@@ -7,7 +7,7 @@ import java.util.Date;
  * Created by lipeng on 16/7/12.
  */
 public class HuiOrderDetailEntity implements Serializable {
-    private static final long serialVersionUID = -5087426549484833372L;
+    private static final long serialVersionUID = -1;
     /**自增id*/
     private long id ;
     /**订单id*/

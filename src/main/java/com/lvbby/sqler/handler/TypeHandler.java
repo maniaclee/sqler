@@ -1,4 +1,4 @@
-package com.lvbby.sqler.jdbc;
+package com.lvbby.sqler.handler;
 
 import com.lvbby.sqler.core.Context;
 import com.lvbby.sqler.core.TableField;
@@ -51,9 +51,9 @@ public class TypeHandler implements TableHandler<Context> {
         List<TableField> fields = tableInfo.getFields();
         if (CollectionUtils.isNotEmpty(fields))
             for (TableField field : fields) {
-                String s = map.get(field.getType());
+                String s = map.get(field.getAppType());
                 if (s != null)
-                    field.setType(s);
+                    field.setAppType(s);
             }
     }
 }

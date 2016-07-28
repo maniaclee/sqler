@@ -5,7 +5,9 @@ import com.lvbby.sqler.core.SqlExecutor;
 import com.lvbby.sqler.core.TableFactory;
 import com.lvbby.sqler.core.TableField;
 import com.lvbby.sqler.core.TableInfo;
+import com.lvbby.sqler.handler.JavaTypeHandler;
 import com.lvbby.sqler.handler.PrintHandler;
+import com.lvbby.sqler.handler.TypeHandler;
 import org.junit.Test;
 
 import java.sql.*;
@@ -20,9 +22,9 @@ public class JdbcTableFactory implements TableFactory {
     Connection conn = null;
 
 
-//    public JdbcTableFactory(DbConnectorConfig dbConnectorConfig) {
-//        this.dbConnectorConfig = dbConnectorConfig;
-//    }
+    //    public JdbcTableFactory(DbConnectorConfig dbConnectorConfig) {
+    //        this.dbConnectorConfig = dbConnectorConfig;
+    //    }
 
     public List<TableInfo> getTables() {
         try {
@@ -41,18 +43,18 @@ public class JdbcTableFactory implements TableFactory {
     public void init() throws SQLException {
         conn = getConnection();
         SqlExecutor sqlExecutor = new SqlExecutor(this, Lists.newArrayList(
-//                TypeHandler.ClassName2PrimiveHandler,
-//                TypeHandler.FullClassName2ClassNameHandler,
-                JdbcTypeHandler.instance,
+                //                TypeHandler.ClassName2PrimiveHandler,
+                //                TypeHandler.FullClassName2ClassNameHandler,
+                JavaTypeHandler.instance,
                 TypeHandler.primitive2BoxingType,
                 new PrintHandler()));
         sqlExecutor.run();
-//        try {
-//            Class<?> aClass = Class.forName("java.lang.Integer");
-//            System.out.println(aClass.isPrimitive());
-//        } catch (ClassNotFoundException e) {
-//            e.printStackTrace();
-//        }
+        //        try {
+        //            Class<?> aClass = Class.forName("java.lang.Integer");
+        //            System.out.println(aClass.isPrimitive());
+        //        } catch (ClassNotFoundException e) {
+        //            e.printStackTrace();
+        //        }
 
     }
 
@@ -97,7 +99,7 @@ public class JdbcTableFactory implements TableFactory {
 
                     f.setName(columnName);
                     f.setDbType(columnTypeName);
-                    f.setType(columnClassName);
+                    f.setAppType(columnClassName);
                     re.add(f);
                 }
             }
@@ -115,8 +117,8 @@ public class JdbcTableFactory implements TableFactory {
             while (rs.next()) {
                 TableField f = new TableField();
                 f.setName(rs.getString(4));
-                f.setDbType(rs.getString(6));
-                f.setType(rs.getString(5));
+                f.setDbType(rs.getString(5));
+                f.setDbTypeName(rs.getString(6));
                 re.add(f);
             }
         } catch (SQLException e) {

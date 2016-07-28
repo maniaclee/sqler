@@ -5,5 +5,5 @@ package com.lvbby.sqler.render;
  */
 public interface TemplateEngineFactory {
 
-    ITemplateEngine getTemplateEngine();
+    TemplateEngine getTemplateEngine();
 }

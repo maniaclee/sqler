@@ -5,8 +5,9 @@ package com.lvbby.sqler.core;
  */
 public class TableField {
     private String name;
-    private String type;
-    private String dbType;
+    private String appType;
+    private String  dbType;
+    private String dbTypeName;
 
     public String getName() {
         return name;
@@ -16,12 +17,12 @@ public class TableField {
         this.name = name;
     }
 
-    public String getType() {
-        return type;
+    public String getAppType() {
+        return appType;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setAppType(String appType) {
+        this.appType = appType;
     }
 
     public String getDbType() {
@@ -32,11 +33,19 @@ public class TableField {
         this.dbType = dbType;
     }
 
+    public String getDbTypeName() {
+        return dbTypeName;
+    }
+
+    public void setDbTypeName(String dbTypeName) {
+        this.dbTypeName = dbTypeName;
+    }
+
     @Override
     public String toString() {
         return "TableField{" +
                 "name='" + name + '\'' +
-                ", type='" + type + '\'' +
+                ", appType='" + appType + '\'' +
                 ", dbType='" + dbType + '\'' +
                 '}';
     }

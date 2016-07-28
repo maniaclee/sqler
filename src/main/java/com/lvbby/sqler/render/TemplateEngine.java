@@ -6,7 +6,7 @@ import java.util.Map;
 /**
  * Created by lipeng on 16/7/28.
  */
-public interface ITemplateEngine {
+public interface TemplateEngine {
     String render(String key ,Object obj);
 
     String render(Map obj);
