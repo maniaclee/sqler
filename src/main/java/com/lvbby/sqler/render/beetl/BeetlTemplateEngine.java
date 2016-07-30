@@ -1,6 +1,7 @@
 package com.lvbby.sqler.render.beetl;
 
 import com.lvbby.sqler.render.TemplateEngine;
+import com.lvbby.sqler.render.SqlerResource;
 import org.beetl.core.Configuration;
 import org.beetl.core.GroupTemplate;
 import org.beetl.core.Template;
@@ -28,6 +29,9 @@ public class BeetlTemplateEngine implements TemplateEngine {
 
     public static BeetlTemplateEngine create(String context) {
         return new BeetlTemplateEngine(context);
+    }
+    public static BeetlTemplateEngine create(SqlerResource sqlerResource) {
+        return new BeetlTemplateEngine(sqlerResource.getResourceAsString());
     }
 
     @Override

@@ -7,10 +7,19 @@ import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
  */
 public class TableField {
     private String name;
+    private String nameInDb;
     private String appType;
-    private String  dbType;
+    private String dbType;
     private String dbTypeName;
     private String comment;
+
+    public String getNameInDb() {
+        return nameInDb;
+    }
+
+    public void setNameInDb(String nameInDb) {
+        this.nameInDb = nameInDb;
+    }
 
     public String getName() {
         return name;

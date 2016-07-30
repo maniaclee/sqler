@@ -2,7 +2,7 @@ package com.lvbby.sqler.handler;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Lists;
-import com.lvbby.sqler.core.TableHandler;
+import com.lvbby.sqler.core.ContextHandler;
 
 import java.sql.Types;
 import java.util.HashMap;
@@ -23,28 +23,30 @@ public class JavaTypeHandlers {
         putAll("float", Lists.newArrayList(Types.FLOAT, Types.REAL));
         putAll("BigDecimal", Lists.newArrayList(Types.DOUBLE, Types.DECIMAL));
         putAll("String", Lists.newArrayList(Types.VARCHAR, Types.LONGNVARCHAR));
+        putAll("boolean", Lists.newArrayList(Types.BIT));
     }
 
     private static HashMap<String, String> map = new HashMap<String, String>() {{
         put("long", "Long");
         put("int", "Integer");
         put("float", "Float");
+        put("boolean", "Boolean");
     }};
 
 
     /***
      * convert factory type 2 java type @see Types
      */
-    public static TableHandler necessary = Handlers.ofField(field -> standardType.keySet().stream().
+    public static ContextHandler necessary = Handlers.ofField(field -> standardType.keySet().stream().
             filter(s -> standardType.get(s).contains(field.getDbType())).
             forEach(field::setAppType));
 
-    public static TableHandler basic = Handlers.ofField(f -> f.setAppType(calDbTypeByName(f.getDbTypeName())));
+    public static ContextHandler basic = Handlers.ofField(f -> f.setAppType(calDbTypeByName(f.getDbTypeName())));
 
     /**
      * to boxing type like int -> Integer
      */
-    public static TableHandler boxingType = Handlers.ofField(f -> {
+    public static ContextHandler boxingType = Handlers.ofField(f -> {
         if (map.containsKey(f.getAppType()))
             f.setAppType(map.get(f.getAppType()));
     });
@@ -56,6 +58,8 @@ public class JavaTypeHandlers {
 
     private static String calDbTypeByName(String type) {
         type = type.toLowerCase();
+        if (type.equals("bit"))
+            return "boolean";
         if (type.equals("bigint"))
             return "long";
         if (type.contains("int"))

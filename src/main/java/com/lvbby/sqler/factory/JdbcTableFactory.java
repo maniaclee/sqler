@@ -67,7 +67,7 @@ public class JdbcTableFactory implements TableFactory {
             ResultSet rs = meta.getColumns(null, null, tableInfo.getName(), "%");
             while (rs.next()) {
                 TableField f = new TableField();
-                f.setName(rs.getString(4));
+                f.setNameInDb(rs.getString(4));
                 f.setDbType(rs.getString(5));
                 f.setDbTypeName(rs.getString(6));
                 f.setComment(rs.getString(12));
@@ -95,7 +95,7 @@ public class JdbcTableFactory implements TableFactory {
                     String columnTypeName = data.getColumnTypeName(i);
                     String columnClassName = data.getColumnClassName(i);
 
-                    f.setName(columnName);
+                    f.setNameInDb(columnName);
                     f.setDbType(columnTypeName);
                     f.setAppType(columnClassName);
                     re.add(f);

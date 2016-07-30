@@ -1,6 +1,7 @@
 package com.lvbby.sqler.handler;
 
 import com.lvbby.sqler.core.*;
+import com.lvbby.sqler.core.impl.ResultMapConst;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -11,7 +12,7 @@ import static com.lvbby.sqler.util.LeeUtil.doCheck;
 /**
  * Created by peng on 16/7/28.
  */
-public class OutputHandler implements TableHandler {
+public class OutputHandler implements ContextHandler {
     private File destDir;
     private ContextConverter<String> fileNameConverter;
 

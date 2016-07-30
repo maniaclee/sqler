@@ -27,12 +27,11 @@ public class DDLTableFactory implements TableFactory {
     public List<TableInfo> getTables() {
         List<TableInfo> re = Lists.newArrayList();
         for (Matcher matcher = p_table.matcher(ddl); matcher.find(); ) {
-            TableInfo tableInfo = new TableInfo();
-            tableInfo.setName(matcher.group("table"));
+            TableInfo tableInfo =   TableInfo.instance(matcher.group("table"));
             String body = matcher.group("body");
             for (Matcher m = p_sentence.matcher(body); m.find(); ) {
                 TableField tableField = new TableField();
-                tableField.setName(m.group("field"));
+                tableField.setNameInDb(m.group("field"));
                 tableField.setDbTypeName(m.group("type"));
                 tableInfo.getFields().add(tableField);
             }

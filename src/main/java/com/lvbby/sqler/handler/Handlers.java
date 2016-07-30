@@ -2,7 +2,7 @@ package com.lvbby.sqler.handler;
 
 import com.google.common.base.CaseFormat;
 import com.lvbby.sqler.core.TableField;
-import com.lvbby.sqler.core.TableHandler;
+import com.lvbby.sqler.core.ContextHandler;
 import com.lvbby.sqler.core.TableInfo;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
@@ -18,16 +18,16 @@ public class Handlers {
         void handle(TableField f);
     }
 
-    public static final TableHandler print = s -> System.out.println(ReflectionToStringBuilder.toString(s));
+    public static final ContextHandler print = s -> System.out.println(ReflectionToStringBuilder.toString(s));
 
-    public static final TableHandler fieldCase = ofField(s -> s.setName(CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, s.getName())));
-    public static final TableHandler tableCase = ofTable(s -> s.setName(CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, s.getName())));
+    public static final ContextHandler fieldCase = ofField(s -> s.setName(CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, s.getNameInDb())));
+    public static final ContextHandler tableCase = ofTable(s -> s.setName(CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, s.getNameInDb())));
 
-    public static TableHandler ofField(SimpleFieldHandler simpleFieldHandler) {
+    public static ContextHandler ofField(SimpleFieldHandler simpleFieldHandler) {
         return context -> context.getTableInfo().getFields().stream().forEach(f -> simpleFieldHandler.handle(f));
     }
 
-    public static TableHandler ofTable(SimpleTableHandler h) {
+    public static ContextHandler ofTable(SimpleTableHandler h) {
         return context -> h.handle(context.getTableInfo());
     }
 

@@ -11,7 +11,7 @@ import static com.lvbby.sqler.util.LeeUtil.doCheck;
  */
 public class SqlExecutor implements Checkable {
     private TableFactory tableFactory;
-    private List<TableHandler> tableHandlers;
+    private List<ContextHandler> contextHandlers;
     private Config config;
 
     @Override
@@ -28,13 +28,13 @@ public class SqlExecutor implements Checkable {
             System.out.println("no table found");
             return;
         }
-        if (CollectionUtils.isNotEmpty(tableHandlers)) {
+        if (CollectionUtils.isNotEmpty(contextHandlers)) {
             for (TableInfo table : tables)
-                for (TableHandler tableHandler : tableHandlers) {
+                for (ContextHandler contextHandler : contextHandlers) {
                     Context context = new Context();
                     context.setTableInfo(table);
                     context.setConfig(config);
-                    tableHandler.handle(context);
+                    contextHandler.handle(context);
                     //clear the context
                     context.clear();
                 }
@@ -42,14 +42,14 @@ public class SqlExecutor implements Checkable {
     }
 
     @Deprecated
-    private void exec(TableHandler tableHandler, Context context) {
-        tableHandler.handle(context);
-        if (tableHandler instanceof HierarchyTableHandler) {
-            HierarchyTableHandler h = (HierarchyTableHandler) tableHandler;
+    private void exec(ContextHandler contextHandler, Context context) {
+        contextHandler.handle(context);
+        if (contextHandler instanceof HierarchyContextHandler) {
+            HierarchyContextHandler h = (HierarchyContextHandler) contextHandler;
             if (CollectionUtils.isNotEmpty(h.getChildren()))
                 h.getChildren().stream().
-                        filter(o -> o instanceof TableHandler)
-                        .forEach(o -> exec(tableHandler, context));
+                        filter(o -> o instanceof ContextHandler)
+                        .forEach(o -> exec(contextHandler, context));
         }
 
     }
@@ -72,12 +72,12 @@ public class SqlExecutor implements Checkable {
         return this;
     }
 
-    public List<TableHandler> getTableHandlers() {
-        return tableHandlers;
+    public List<ContextHandler> getContextHandlers() {
+        return contextHandlers;
     }
 
-    public SqlExecutor setTableHandlers(List<TableHandler> tableHandlers) {
-        this.tableHandlers = tableHandlers;
+    public SqlExecutor setContextHandlers(List<ContextHandler> contextHandlers) {
+        this.contextHandlers = contextHandlers;
         return this;
     }
 

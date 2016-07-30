@@ -1,4 +1,4 @@
-package com.lvbby.sqler.core;
+package com.lvbby.sqler.core.impl;
 
 /**
  * Created by peng on 16/7/28.

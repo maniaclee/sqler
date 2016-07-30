@@ -1,4 +1,4 @@
-package ${config.pack};
+package ${lee.getEntityPackage(config.pack)};
 
 import java.io.Serializable;
 import java.util.Date;
@@ -6,7 +6,7 @@ import java.util.Date;
 /**
  * Created by ${config.author} on ${date(),"yyyy-MM-dd"} .
  */
-public class ${lee.capital(className)} implements Serializable {
+public class ${lee.getEntityClassName(table)} implements Serializable {
     private static final long serialVersionUID = -1;
 
     <% for(f in table.fields){ %>
