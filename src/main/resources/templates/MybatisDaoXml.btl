@@ -8,7 +8,7 @@
     </resultMap>
 
     <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="UserDetail">
-        <selectKey resultType="Long" keyProperty="id" order="AFTER" >
+        <selectKey resultType="${table.primaryKeyField.appType}" keyProperty="id" order="AFTER" >
           SELECT LAST_INSERT_ID() AS id
         </selectKey>
         INSERT INTO ${table.nameInDb}

@@ -7,6 +7,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import java.util.List;
 import java.util.Objects;
 
+import static com.lvbby.sqler.util.LeeUtil.doCheck;
+
 /**
  * Created by peng on 16/7/27.
  */
@@ -17,8 +19,7 @@ public class TableInfo {
     String name;
     String nameInDb;
     List<TableField> fields = Lists.newLinkedList();
-    String primaryKeyColumn;
-    private TableField primaryKeyField;//TODO
+    private TableField primaryKeyField;
 
     public static TableInfo instance(String table) {
         TableInfo tableInfo = new TableInfo();
@@ -26,15 +27,18 @@ public class TableInfo {
         return tableInfo;
     }
 
-    public TableField findPrimaryKey(){
-        return fields.stream().filter(f -> Objects.equals(f.getNameInDb(), primaryKeyColumn)).findFirst().orElse(null);
-    }
-    public String getPrimaryKeyColumn() {
-        return primaryKeyColumn;
+
+    public void buildPrimaryKeyField(String primaryKeyColumn) {
+        this.primaryKeyField = fields.stream().filter(f -> Objects.equals(f.getNameInDb(), primaryKeyColumn)).findFirst().orElse(null);
+        doCheck(primaryKeyField != null, "can't find primary key");//TODO primary key field is not equal with the real field in fields
     }
 
-    public void setPrimaryKeyColumn(String primaryKeyColumn) {
-        this.primaryKeyColumn = primaryKeyColumn;
+    public TableField getPrimaryKeyField() {
+        return primaryKeyField;
+    }
+
+    public void setPrimaryKeyField(TableField primaryKeyField) {
+        this.primaryKeyField = primaryKeyField;
     }
 
     public String getNameInDb() {

@@ -32,7 +32,7 @@ public class JdbcTableFactory implements TableFactory {
             return parseTables().stream().map(s -> {
                 TableInfo instance = TableInfo.instance(s);
                 instance.setFields(getFields(instance));
-                getPrimaryKey(instance.getNameInDb());
+                instance.buildPrimaryKeyField(getPrimaryKey(instance.getNameInDb()));
                 return instance;
             }).collect(Collectors.toList());
         } catch (SQLException e) {
@@ -50,7 +50,6 @@ public class JdbcTableFactory implements TableFactory {
                 // System.err.println("COLUMN_NAME: " + pkRSet.getObject(4));
                 // System.err.println("KEY_SEQ : " + pkRSet.getObject(5));
                 // System.err.println("PK_NAME : " + pkRSet.getObject(6));
-                System.err.println("****** ******* ******");
                 return pkRSet.getObject(4).toString();
             }
 

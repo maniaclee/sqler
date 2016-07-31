@@ -5,5 +5,5 @@ import ${lee.getEntityPackage(config.pack)}.${lee.getEntityClassName(table)}
  * Created by ${config.author} on ${date(),"yyyy-MM-dd"} .
  */
 public interface ${lee.getDaoClassName(table)} {
-	${table.findPrimaryKey().appType} add(${lee.getEntityClassName(table)} entity);
+	${table.primaryKeyField.appType} add(${lee.getEntityClassName(table)} entity);
 }
