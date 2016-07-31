@@ -110,6 +110,13 @@ public class TestCase {
                                         .setSuffix("java"))
                                 .addPipeLine(PipeLines.print),
                         TemplateEngineHandler.
+                                of(BeetlTemplateEngine.create(SqlerResource.Beetl_Repository.getResourceAsString()))
+                                .addPipeLine(OutputPipeLine.create()
+                                        .setDestDir(dbConnectorConfig.calDirectory(LeeFn.getRepositoryPackage(dbConnectorConfig.getPack())))
+                                        .setFileNameConverter(context -> LeeFn.getRepositoryClassName(context.getTableInfo()))
+                                        .setSuffix("java"))
+                                .addPipeLine(PipeLines.print),
+                        TemplateEngineHandler.
                                 of(BeetlTemplateEngine.create(SqlerResource.Beetl_MybatisDaoXml.getResourceAsString()))
                                 .addPipeLine(OutputPipeLine.create()
                                         .setDestDir(dbConnectorConfig.calDirectory(LeeFn.getMapperXmlPackage(dbConnectorConfig.getPack())))

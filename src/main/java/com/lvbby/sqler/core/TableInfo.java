@@ -5,6 +5,7 @@ import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Created by peng on 16/7/27.
@@ -16,11 +17,24 @@ public class TableInfo {
     String name;
     String nameInDb;
     List<TableField> fields = Lists.newLinkedList();
+    String primaryKeyColumn;
+    private TableField primaryKeyField;//TODO
 
     public static TableInfo instance(String table) {
         TableInfo tableInfo = new TableInfo();
         tableInfo.setNameInDb(table);
         return tableInfo;
+    }
+
+    public TableField findPrimaryKey(){
+        return fields.stream().filter(f -> Objects.equals(f.getNameInDb(), primaryKeyColumn)).findFirst().orElse(null);
+    }
+    public String getPrimaryKeyColumn() {
+        return primaryKeyColumn;
+    }
+
+    public void setPrimaryKeyColumn(String primaryKeyColumn) {
+        this.primaryKeyColumn = primaryKeyColumn;
     }
 
     public String getNameInDb() {

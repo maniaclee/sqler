@@ -11,6 +11,9 @@ public class LeeFn {
     public String capital(String s) {
         return StringUtils.capitalize(s);
     }
+    public String unCapital(String s) {
+        return StringUtils.uncapitalize(s);
+    }
 
     public static String getDaoPackage(String pack) {
         return LeeUtil.concatPackage(pack, "dao");
@@ -26,6 +29,14 @@ public class LeeFn {
 
     public static String getEntityClassName(TableInfo c) {
         return c.getName() + "Entity";
+    }
+
+    public static String getRepositoryPackage(String pack) {
+        return LeeUtil.concatPackage(pack, "repo");
+    }
+
+    public static String getRepositoryClassName(TableInfo c) {
+        return c.getName() + "Repository";
     }
 
     public static String getMapperXmlPackage(String pack) {

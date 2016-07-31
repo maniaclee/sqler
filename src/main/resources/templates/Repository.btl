@@ -1,0 +1,23 @@
+package ${lee.getRepositoryPackage(config.pack)};
+
+import java.util.Date;
+import javax.annotation.Resource;
+import org.springframework.stereotype.Component;
+import ${lee.getDaoPackage(config.pack)}.${lee.getDaoClassName(table)};
+
+
+
+/**
+ * Created by ${config.author} on ${date(),"yyyy-MM-dd"} .
+ */
+@Component
+public class ${lee.getRepositoryClassName(table)} {
+
+    @Resource
+    private ${lee.getDaoClassName(table)} ${lee.unCapital(lee.getDaoClassName(table))};
+
+	long add(${lee.getEntityClassName(table)} entity){
+		return ${lee.unCapital(lee.getDaoClassName(table))}.add(entity);
+	}
+
+}

@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.lvbby.sqler.core.TableFactory;
 import com.lvbby.sqler.core.TableField;
 import com.lvbby.sqler.core.TableInfo;
+import com.lvbby.sqler.exceptions.SqlerException;
 
 import java.sql.*;
 import java.util.List;
@@ -31,10 +32,30 @@ public class JdbcTableFactory implements TableFactory {
             return parseTables().stream().map(s -> {
                 TableInfo instance = TableInfo.instance(s);
                 instance.setFields(getFields(instance));
+                getPrimaryKey(instance.getNameInDb());
                 return instance;
             }).collect(Collectors.toList());
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new SqlerException("failed to get tables ", e);
+        }
+    }
+
+    private String getPrimaryKey(String table) {
+        try {
+            ResultSet pkRSet = conn.getMetaData().getPrimaryKeys(null, null, table);
+            while (pkRSet.next()) {
+                // System.err.println("TABLE_CAT : " + pkRSet.getObject(1));
+                // System.err.println("TABLE_SCHEME: " + pkRSet.getObject(2));
+                // System.err.println("TABLE_NAME : " + pkRSet.getObject(3));
+                // System.err.println("COLUMN_NAME: " + pkRSet.getObject(4));
+                // System.err.println("KEY_SEQ : " + pkRSet.getObject(5));
+                // System.err.println("PK_NAME : " + pkRSet.getObject(6));
+                System.err.println("****** ******* ******");
+                return pkRSet.getObject(4).toString();
+            }
+
+        } catch (SQLException e) {
+            throw new SqlerException("failed to find primary key", e);
         }
         return null;
     }
@@ -71,6 +92,8 @@ public class JdbcTableFactory implements TableFactory {
                 f.setDbType(rs.getString(5));
                 f.setDbTypeName(rs.getString(6));
                 f.setComment(rs.getString(12));
+                // f.setNameInDb(rs.getString("COLUMN_NAME"));
+                // f.setDbType(rs.getString("TYPE_NAME"));
                 re.add(f);
             }
         } catch (SQLException e) {

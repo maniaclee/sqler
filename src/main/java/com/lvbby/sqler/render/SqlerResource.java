@@ -12,6 +12,7 @@ public enum SqlerResource {
     Beetl_JavaBean("templates/JavaBean.btl"),
 
     Beetl_MybatisDao("templates/MybatisDao.btl"),
+    Beetl_Repository("templates/Repository.btl"),
     Beetl_MybatisDaoXml("templates/MybatisDaoXml.btl");
 
 
