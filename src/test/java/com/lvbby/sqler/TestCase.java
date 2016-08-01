@@ -63,14 +63,14 @@ public class TestCase {
         SqlExecutor sqlExecutor = new SqlExecutor()
                 .setConfig(dbConnectorConfig)
                 .setTableFactory(JdbcTableFactory.create(dbConnectorConfig))
-//                .setTableFactory(DDLTableFactory.create(IOUtils.toString(TestCase.class.getClassLoader().getResourceAsStream("testddl.sql"))))
+                //                .setTableFactory(DDLTableFactory.create(IOUtils.toString(TestCase.class.getClassLoader().getResourceAsStream("testddl.sql"))))
                 .setContextHandlers(Lists.newArrayList(
-//                        JavaTypeHandlers.necessary,
+                        //                        JavaTypeHandlers.necessary,
                         JavaTypeHandlers.basic,
                         JavaTypeHandlers.boxingType,
                         Handlers.tableCase,
                         Handlers.fieldCase,
-//                        Handlers.print,
+                        //                        Handlers.print,
                         DefaultHierarchyContextHandler
                                 .of(TemplateEngineHandler.
                                         of(BeetlTemplateEngine.create(IOUtils.toString(TestCase.class.getClassLoader().getResourceAsStream("templates/JavaBean.btl"))))
@@ -90,7 +90,7 @@ public class TestCase {
         SqlExecutor sqlExecutor = new SqlExecutor()
                 .setConfig(dbConnectorConfig)
                 // .setTableFactory(JdbcTableFactory.create(dbConnectorConfig))
-               .setTableFactory(DDLTableFactory.create(IOUtils.toString(TestCase.class.getClassLoader().getResourceAsStream("testddl.sql"))))
+                .setTableFactory(DDLTableFactory.create(IOUtils.toString(TestCase.class.getClassLoader().getResourceAsStream("testddl.sql"))))
                 .setContextHandlers(Lists.newArrayList(
                         JavaTypeHandlers.basic,
                         JavaTypeHandlers.boxingType,
@@ -98,7 +98,7 @@ public class TestCase {
                         Handlers.fieldCase,
                         TemplateEngineHandler.
                                 of(BeetlTemplateEngine.create(SqlerResource.Beetl_JavaBean.getResourceAsString()))
-                                .bind("className",context -> LeeFn.getEntityClassName(context.getTableInfo()))
+                                .bind("className", context -> LeeFn.getEntityClassName(context.getTableInfo()))
                                 .addPipeLine(OutputPipeLine.create()
                                         .setDestDir(dbConnectorConfig.calDirectory(LeeFn.getEntityPackage(dbConnectorConfig.getPack())))
                                         .setFileNameConverter(context -> LeeFn.getEntityClassName(context.getTableInfo()))

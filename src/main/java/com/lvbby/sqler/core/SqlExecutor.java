@@ -1,5 +1,7 @@
 package com.lvbby.sqler.core;
 
+import com.lvbby.codebot.ChainExecutor;
+import com.lvbby.codebot.ContextHandler;
 import org.apache.commons.collections.CollectionUtils;
 
 import java.util.List;
@@ -11,7 +13,7 @@ import static com.lvbby.sqler.util.LeeUtil.doCheck;
  */
 public class SqlExecutor implements Checkable {
     private TableFactory tableFactory;
-    private List<ContextHandler> contextHandlers;
+    private List<ContextHandler<Context>> contextHandlers;
     private Config config;
 
     @Override
@@ -28,17 +30,13 @@ public class SqlExecutor implements Checkable {
             System.out.println("no table found");
             return;
         }
-        if (CollectionUtils.isNotEmpty(contextHandlers)) {
-            for (TableInfo table : tables)
-                for (ContextHandler contextHandler : contextHandlers) {
-                    Context context = new Context();
-                    context.setTableInfo(table);
-                    context.setConfig(config);
-                    contextHandler.handle(context);
-                    //clear the context
-                    context.clear();
-                }
-        }
+        ChainExecutor<Context> exec = ChainExecutor.create(contextHandlers);
+        tables.stream().map(table -> {
+            Context context = new Context();
+            context.setTableInfo(table);
+            context.setConfig(config);
+            return context;
+        }).forEach(context -> exec.exec(context));
     }
 
     @Deprecated
@@ -72,11 +70,11 @@ public class SqlExecutor implements Checkable {
         return this;
     }
 
-    public List<ContextHandler> getContextHandlers() {
+    public List<ContextHandler<Context>> getContextHandlers() {
         return contextHandlers;
     }
 
-    public SqlExecutor setContextHandlers(List<ContextHandler> contextHandlers) {
+    public SqlExecutor setContextHandlers(List<ContextHandler<Context>> contextHandlers) {
         this.contextHandlers = contextHandlers;
         return this;
     }

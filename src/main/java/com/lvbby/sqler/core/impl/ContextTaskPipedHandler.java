@@ -1,26 +1,25 @@
 package com.lvbby.sqler.core.impl;
 
 import com.google.common.collect.Lists;
-import com.lvbby.sqler.core.Context;
-import com.lvbby.sqler.core.PipeLine;
+import com.lvbby.codebot.PipeLine;
 
 import java.util.List;
 
 /**
  * Created by peng on 16/7/30.
  */
-public abstract class ContextTaskPipedHandler<T> extends ContextTaskHandler {
-    private List<PipeLine<T>> pipeLines = Lists.newLinkedList();
+public abstract class ContextTaskPipedHandler<T, R> extends ContextTaskHandler<T, R> {
+    private List<PipeLine<R, T>> pipeLines = Lists.newLinkedList();
 
-    public ContextTaskPipedHandler<T> addPipeLine(PipeLine<T> pipeLine) {
+    public ContextTaskPipedHandler<T, R> addPipeLine(PipeLine<R, T> pipeLine) {
         pipeLines.add(pipeLine);
         return this;
     }
 
     @Override
-    public T process(Context context) {
-        T t = doProcess(context);
-        for (PipeLine<T> pipeLine : pipeLines) {
+    public R process(T context) {
+        R t = doProcess(context);
+        for (PipeLine<R, T> pipeLine : pipeLines) {
             try {
                 pipeLine.handle(t, context);
             } catch (Exception e) {
@@ -30,6 +29,6 @@ public abstract class ContextTaskPipedHandler<T> extends ContextTaskHandler {
         return t;
     }
 
-    public abstract T doProcess(Context context);
+    public abstract R doProcess(T context);
 
 }

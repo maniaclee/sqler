@@ -11,7 +11,7 @@ import java.util.Map;
 /**
  * Created by lipeng on 16/7/28.
  */
-public class TemplateEngineHandler extends ContextTaskPipedHandler<String> {
+public class TemplateEngineHandler extends ContextTaskPipedHandler<Context,String> {
     private TemplateEngine templateEngine;
     private Map<String, ContextConverter> handlerMap = Maps.newHashMap();
 

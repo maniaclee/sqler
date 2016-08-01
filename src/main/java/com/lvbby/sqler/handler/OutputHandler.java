@@ -1,5 +1,6 @@
 package com.lvbby.sqler.handler;
 
+import com.lvbby.codebot.ContextHandler;
 import com.lvbby.sqler.core.*;
 import com.lvbby.sqler.core.impl.ResultMapConst;
 
@@ -12,7 +13,7 @@ import static com.lvbby.sqler.util.LeeUtil.doCheck;
 /**
  * Created by peng on 16/7/28.
  */
-public class OutputHandler implements ContextHandler {
+public class OutputHandler implements ContextHandler<Context> {
     private File destDir;
     private ContextConverter<String> fileNameConverter;
 

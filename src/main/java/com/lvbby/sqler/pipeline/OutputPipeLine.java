@@ -2,7 +2,7 @@ package com.lvbby.sqler.pipeline;
 
 import com.lvbby.sqler.core.Context;
 import com.lvbby.sqler.core.ContextConverter;
-import com.lvbby.sqler.core.PipeLine;
+import com.lvbby.codebot.PipeLine;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
@@ -13,7 +13,7 @@ import static com.lvbby.sqler.util.LeeUtil.doCheck;
 /**
  * Created by peng on 16/7/28.
  */
-public class OutputPipeLine implements PipeLine {
+public class OutputPipeLine implements PipeLine<String, Context> {
     private File destDir;
     private ContextConverter<String> fileNameConverter;
     private String suffix;
@@ -38,7 +38,7 @@ public class OutputPipeLine implements PipeLine {
     }
 
     @Override
-    public void handle(Object o, Context context) {
+    public void handle(String o, Context context) {
         doCheck(destDir != null && (destDir.isDirectory() || !destDir.exists() && destDir.mkdirs()), "invalid dest directory");
         doCheck(fileNameConverter != null, "fileNameConverter is null");
         if (o == null)

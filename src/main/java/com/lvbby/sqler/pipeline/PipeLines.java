@@ -1,6 +1,6 @@
 package com.lvbby.sqler.pipeline;
 
-import com.lvbby.sqler.core.PipeLine;
+import com.lvbby.codebot.PipeLine;
 
 /**
  * Created by peng on 16/7/30.

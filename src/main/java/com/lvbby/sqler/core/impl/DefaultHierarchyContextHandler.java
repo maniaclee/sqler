@@ -2,7 +2,7 @@ package com.lvbby.sqler.core.impl;
 
 import com.google.common.collect.Lists;
 import com.lvbby.sqler.core.Context;
-import com.lvbby.sqler.core.ContextHandler;
+import com.lvbby.codebot.ContextHandler;
 import com.lvbby.sqler.core.HierarchyContextHandler;
 
 import java.util.List;
@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Created by peng on 16/7/28.
  */
-public class DefaultHierarchyContextHandler implements HierarchyContextHandler {
+public class DefaultHierarchyContextHandler implements HierarchyContextHandler<Context> {
     private List<ContextHandler> contextHandlers = Lists.newLinkedList();
 
     private ContextHandler holder;
