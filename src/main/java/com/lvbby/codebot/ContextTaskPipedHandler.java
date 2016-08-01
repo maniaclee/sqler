@@ -1,7 +1,6 @@
-package com.lvbby.sqler.core.impl;
+package com.lvbby.codebot;
 
 import com.google.common.collect.Lists;
-import com.lvbby.codebot.PipeLine;
 
 import java.util.List;
 

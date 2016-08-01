@@ -3,7 +3,7 @@ package com.lvbby.sqler.handler;
 import com.google.common.collect.Maps;
 import com.lvbby.sqler.core.Context;
 import com.lvbby.sqler.core.ContextConverter;
-import com.lvbby.sqler.core.impl.ContextTaskPipedHandler;
+import com.lvbby.codebot.ContextTaskPipedHandler;
 import com.lvbby.sqler.render.TemplateEngine;
 
 import java.util.Map;
