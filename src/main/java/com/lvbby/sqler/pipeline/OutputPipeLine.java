@@ -2,7 +2,7 @@ package com.lvbby.sqler.pipeline;
 
 import com.lvbby.sqler.core.Context;
 import com.lvbby.sqler.core.ContextConverter;
-import com.lvbby.codebot.PipeLine;
+import com.lvbby.codebot.chain.PipeLine;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
