@@ -32,7 +32,7 @@ public class OutputHandler implements ContextHandler {
 
     @Override
     public void handle(Context context) {
-        doCheck(destDir != null && (destDir.isDirectory() || !destDir.exists() && destDir.mkdir()), "invalid dest directory");
+        doCheck(destDir != null && (destDir.isDirectory() || !destDir.exists() && destDir.mkdirs()), "invalid dest directory");
         doCheck(fileNameConverter != null, "fileNameConverter is null");
         Object o = context.queryResult(ResultMapConst.OUTPUT);
         if (o == null)

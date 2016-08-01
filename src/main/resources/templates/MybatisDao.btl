@@ -1,6 +1,6 @@
 package ${lee.getDaoPackage(config.pack)};
 
-import ${lee.getEntityPackage(config.pack)}.${lee.getEntityClassName(table)}
+import ${lee.getEntityPackage(config.pack)}.${lee.getEntityClassName(table)};
 /**
  * Created by ${config.author} on ${date(),"yyyy-MM-dd"} .
  */

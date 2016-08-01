@@ -98,6 +98,7 @@ public class TestCase {
                         Handlers.fieldCase,
                         TemplateEngineHandler.
                                 of(BeetlTemplateEngine.create(SqlerResource.Beetl_JavaBean.getResourceAsString()))
+                                .bind("className",context -> LeeFn.getEntityClassName(context.getTableInfo()))
                                 .addPipeLine(OutputPipeLine.create()
                                         .setDestDir(dbConnectorConfig.calDirectory(LeeFn.getEntityPackage(dbConnectorConfig.getPack())))
                                         .setFileNameConverter(context -> LeeFn.getEntityClassName(context.getTableInfo()))
@@ -136,7 +137,7 @@ public class TestCase {
         dbConnectorConfig.setPassword("");
         dbConnectorConfig.setAuthor("maniac.lee");
         dbConnectorConfig.setPack("com.lvbby.com.test");
-        dbConnectorConfig.setRootPath("/Users/peng/tmp/sqler");
+        dbConnectorConfig.setRootPath("/Users/psyco/workspace/github/user/user-biz/src/main/java");
         return dbConnectorConfig;
     }
 

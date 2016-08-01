@@ -6,7 +6,7 @@ import java.util.Date;
 /**
  * Created by ${config.author} on ${date(),"yyyy-MM-dd"} .
  */
-public class ${lee.getEntityClassName(table)} implements Serializable {
+public class ${className} implements Serializable {
     private static final long serialVersionUID = -1;
 
     <% for(f in table.fields){ %>

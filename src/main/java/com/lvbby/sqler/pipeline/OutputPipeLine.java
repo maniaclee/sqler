@@ -46,7 +46,7 @@ public class OutputPipeLine implements PipeLine {
         String re = o.toString();
         String fileName = fileNameConverter.handle(context);
         if (StringUtils.isNotBlank(suffix))
-            fileName += suffix.trim();
+            fileName = fileName + "." + suffix.trim();
         File file = new File(destDir, fileName);
         try {
             PrintWriter printWriter = new PrintWriter(file);
