@@ -13,14 +13,14 @@
         </selectKey>
         INSERT INTO ${table.nameInDb}
         (
-         <% for(f in table.fields){ %>
+         <% for(f in table.fields){ if(!lee.eq(f.nameInDb,table.primaryKeyField.nameInDb)){%>
          	${f.nameInDb}${fLP.last?"":","}
-         <%}%>
+         <%}}%>
         )
         values(
-        <% for(f in table.fields){ %>
+        <% for(f in table.fields){ if(!lee.eq(f.name,table.primaryKeyField.name)){%>
             #{${f.name}}${fLP.last?"":","}
-        <%}%>
+        <%}}%>
         )
     </insert>
 </mapper>

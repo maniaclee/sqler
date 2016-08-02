@@ -4,6 +4,8 @@ import com.lvbby.sqler.core.TableInfo;
 import com.lvbby.sqler.util.LeeUtil;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Objects;
+
 /**
  * Created by lipeng on 16/7/28.
  */
@@ -54,4 +56,7 @@ public class LeeFn {
         return tableInfo.getName() + "Mapper.xml";
     }
 
+    public static boolean eq(Object a , Object b){
+        return Objects.equals(a,b);
+    }
 }

@@ -119,7 +119,7 @@ public class TestCase {
         dbConnectorConfig.setUser("root");
         dbConnectorConfig.setPassword("");
         dbConnectorConfig.setAuthor("lipeng");
-        dbConnectorConfig.setPack("com.lvbby.com.test");
+        dbConnectorConfig.setPack("com.lvbby.user");
         // dbConnectorConfig.setRootPath("/Users/psyco/workspace/github/user/user-biz/src/main/java");
         dbConnectorConfig.setRootPath("/Users/peng/workspace/github/user/user-biz/src/main/java");
         return dbConnectorConfig;
