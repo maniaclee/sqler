@@ -7,10 +7,7 @@
          <%}%>
     </resultMap>
 
-    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
-        <selectKey resultType="${table.primaryKeyField.appType}" keyProperty="id" order="AFTER" >
-          SELECT LAST_INSERT_ID() AS id
-        </selectKey>
+    <insert id="add" useGeneratedKeys="true" keyProperty="${table.primaryKeyField.name}">
         INSERT INTO ${table.nameInDb}
         (
          <% for(f in table.fields){ if(!lee.eq(f.nameInDb,table.primaryKeyField.nameInDb)){%>

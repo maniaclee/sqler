@@ -17,8 +17,10 @@ public class ${lee.getRepositoryClassName(table)} {
     @Resource
     private ${lee.getDaoClassName(table)} ${lee.unCapital(lee.getDaoClassName(table))};
 
-	long add(${lee.getDtoClassName(table)} entity){
-		return ${lee.unCapital(lee.getDaoClassName(table))}.add(convert(entity));
+	public long add(${lee.getDtoClassName(table)} entity){
+		${lee.getEntityClassName(table)} res = convert(entity);
+		${lee.unCapital(lee.getDaoClassName(table))}.add(res);
+		return res.get${lee.capital(table.primaryKeyField.name)}();
 	}
 
 	public static ${lee.getDtoClassName(table)} convert(${lee.getEntityClassName(table)} src) {
