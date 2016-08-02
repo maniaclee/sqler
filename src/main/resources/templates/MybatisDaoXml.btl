@@ -7,7 +7,7 @@
          <%}%>
     </resultMap>
 
-    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="UserDetail">
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
         <selectKey resultType="${table.primaryKeyField.appType}" keyProperty="id" order="AFTER" >
           SELECT LAST_INSERT_ID() AS id
         </selectKey>
