@@ -60,7 +60,7 @@ public class JavaTypeHandlers {
         type = type.toLowerCase();
         if (type.equals("bit"))
             return "boolean";
-        if (type.equals("bigint"))
+        if (type.contains("bigint"))
             return "long";
         if (type.contains("int"))
             return "int";

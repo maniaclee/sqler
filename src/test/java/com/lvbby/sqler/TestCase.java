@@ -2,13 +2,10 @@ package com.lvbby.sqler;
 
 import com.google.common.collect.Lists;
 import com.lvbby.sqler.core.SqlExecutor;
-import com.lvbby.sqler.core.impl.DefaultHierarchyContextHandler;
-import com.lvbby.sqler.factory.DDLTableFactory;
 import com.lvbby.sqler.factory.DbConnectorConfig;
 import com.lvbby.sqler.factory.JdbcTableFactory;
 import com.lvbby.sqler.handler.Handlers;
 import com.lvbby.sqler.handler.JavaTypeHandlers;
-import com.lvbby.sqler.handler.OutputHandler;
 import com.lvbby.sqler.handler.TemplateEngineHandler;
 import com.lvbby.sqler.pipeline.OutputPipeLine;
 import com.lvbby.sqler.pipeline.PipeLines;
@@ -16,7 +13,6 @@ import com.lvbby.sqler.render.SqlerResource;
 import com.lvbby.sqler.render.beetl.BeetlTemplateEngine;
 import com.lvbby.sqler.render.beetl.LeeFn;
 import com.lvbby.sqler.util.LeeUtil;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.beetl.core.Configuration;
 import org.beetl.core.GroupTemplate;
@@ -25,8 +21,11 @@ import org.beetl.core.resource.ClasspathResourceLoader;
 import org.beetl.core.resource.StringTemplateResourceLoader;
 import org.junit.Test;
 
-import java.io.File;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
 
 /**
  * Created by lipeng on 16/7/28.
@@ -58,42 +57,16 @@ public class TestCase {
 
 
     @Test
-    public void cases() throws IOException {
-        DbConnectorConfig dbConnectorConfig = getDbConnectorConfig();
-        SqlExecutor sqlExecutor = new SqlExecutor()
-                .setConfig(dbConnectorConfig)
-                .setTableFactory(JdbcTableFactory.create(dbConnectorConfig))
-                //                .setTableFactory(DDLTableFactory.create(IOUtils.toString(TestCase.class.getClassLoader().getResourceAsStream("testddl.sql"))))
-                .setContextHandlers(Lists.newArrayList(
-                        //                        JavaTypeHandlers.necessary,
-                        JavaTypeHandlers.basic,
-                        JavaTypeHandlers.boxingType,
-                        Handlers.tableCase,
-                        Handlers.fieldCase,
-                        //                        Handlers.print,
-                        DefaultHierarchyContextHandler
-                                .of(TemplateEngineHandler.
-                                        of(BeetlTemplateEngine.create(IOUtils.toString(TestCase.class.getClassLoader().getResourceAsStream("templates/JavaBean.btl"))))
-                                        .bind("className", context -> context.getTableInfo().getName() + "Entity"))
-                                .addNext(OutputHandler.create()
-                                        .setDestDir(new File("/Users/peng/tmp/gen/entity"))
-                                        .setFileNameConverter(context -> context.getTableInfo().getName() + "Entity.java"))
-
-                ));
-        sqlExecutor.run();
-    }
-
-    @Test
     public void casesPipe() throws IOException {
         DbConnectorConfig dbConnectorConfig = getDbConnectorConfig();
         dbConnectorConfig.check();
         SqlExecutor sqlExecutor = new SqlExecutor()
                 .setConfig(dbConnectorConfig)
-                // .setTableFactory(JdbcTableFactory.create(dbConnectorConfig))
-                .setTableFactory(DDLTableFactory.create(IOUtils.toString(TestCase.class.getClassLoader().getResourceAsStream("testddl.sql"))))
+                .setTableFactory(JdbcTableFactory.create(dbConnectorConfig))
+                // .setTableFactory(DDLTableFactory.create(IOUtils.toString(TestCase.class.getClassLoader().getResourceAsStream("testddl.sql"))))
                 .setContextHandlers(Lists.newArrayList(
                         JavaTypeHandlers.basic,
-                        JavaTypeHandlers.boxingType,
+                        // JavaTypeHandlers.boxingType,
                         Handlers.tableCase,
                         Handlers.fieldCase,
                         TemplateEngineHandler.
@@ -135,10 +108,33 @@ public class TestCase {
         dbConnectorConfig.setJdbcUrl("jdbc:mysql://localhost:3306/user");
         dbConnectorConfig.setUser("root");
         dbConnectorConfig.setPassword("");
-        dbConnectorConfig.setAuthor("maniac.lee");
+        dbConnectorConfig.setAuthor("lipeng");
         dbConnectorConfig.setPack("com.lvbby.com.test");
-        dbConnectorConfig.setRootPath("/Users/psyco/workspace/github/user/user-biz/src/main/java");
+        // dbConnectorConfig.setRootPath("/Users/psyco/workspace/github/user/user-biz/src/main/java");
+        dbConnectorConfig.setRootPath("/Users/peng/workspace/github/user/user-biz/src/main/java");
         return dbConnectorConfig;
+    }
+
+    @Test
+    public void testJdbc() throws Exception {
+        // JdbcTableFactory jdbcTableFactory = JdbcTableFactory.create(getDbConnectorConfig());
+        // List<TableInfo> tables = jdbcTableFactory.getTables();
+        // System.out.println(tables);
+        // for (TableInfo table : tables) {
+        //     System.out.println(table.getFields().size());
+        // }
+
+        Class.forName("com.mysql.jdbc.Driver");
+        Connection conn = DriverManager.getConnection(
+                "jdbc:mysql://localhost:3306/user",
+                "root",
+                "");
+        DatabaseMetaData meta = conn.getMetaData();
+        ResultSet rs = meta.getColumns(null, "%", "user_detail", "%");
+        // // ResultSet rs = meta.getColumns(null, null, tableInfo.getName(), "%");
+        while (rs.next()) {
+            System.out.println(rs.getString(4));
+        }
     }
 
     @Test

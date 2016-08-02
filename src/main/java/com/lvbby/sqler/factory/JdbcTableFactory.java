@@ -84,15 +84,13 @@ public class JdbcTableFactory implements TableFactory {
         List<TableField> re = Lists.newArrayList();
         try {
             DatabaseMetaData meta = conn.getMetaData();
-            ResultSet rs = meta.getColumns(null, null, tableInfo.getName(), "%");
+            ResultSet rs = meta.getColumns(null, "%", tableInfo.getNameInDb(), "%");
             while (rs.next()) {
                 TableField f = new TableField();
                 f.setNameInDb(rs.getString(4));
                 f.setDbType(rs.getString(5));
                 f.setDbTypeName(rs.getString(6));
                 f.setComment(rs.getString(12));
-                // f.setNameInDb(rs.getString("COLUMN_NAME"));
-                // f.setDbType(rs.getString("TYPE_NAME"));
                 re.add(f);
             }
         } catch (SQLException e) {
@@ -100,6 +98,7 @@ public class JdbcTableFactory implements TableFactory {
         }
         return re;
     }
+
 
     @Deprecated
     private List<TableField> getFields2(TableInfo tableInfo) {
