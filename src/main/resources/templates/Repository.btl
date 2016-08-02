@@ -3,6 +3,7 @@ package ${lee.getRepositoryPackage(config.pack)};
 import javax.annotation.Resource;
 import org.springframework.stereotype.Component;
 import ${lee.getEntityPackage(config.pack)}.${lee.getEntityClassName(table)};
+import ${lee.getDtoPackage(config.pack)}.${lee.getDtoClassName(table)};
 import ${lee.getDaoPackage(config.pack)}.${lee.getDaoClassName(table)};
 
 
@@ -16,8 +17,23 @@ public class ${lee.getRepositoryClassName(table)} {
     @Resource
     private ${lee.getDaoClassName(table)} ${lee.unCapital(lee.getDaoClassName(table))};
 
-	long add(${lee.getEntityClassName(table)} entity){
-		return ${lee.unCapital(lee.getDaoClassName(table))}.add(entity);
+	long add(${lee.getDtoClassName(table)} entity){
+		return ${lee.unCapital(lee.getDaoClassName(table))}.add(convert(entity));
 	}
+
+	public static ${lee.getDtoClassName(table)} convert(${lee.getEntityClassName(table)} src) {
+		${lee.getDtoClassName(table)} re = new ${lee.getDtoClassName(table)}();
+		<% for(f in table.fields){ %>
+		re.set${lee.capital(f.name)}(src.get${lee.capital(f.name)}());
+		<%}%>
+		return re;
+    }
+	public static ${lee.getEntityClassName(table)} convert(${lee.getDtoClassName(table)} src) {
+		${lee.getEntityClassName(table)} re = new ${lee.getEntityClassName(table)}();
+		<% for(f in table.fields){ %>
+		re.set${lee.capital(f.name)}(src.get${lee.capital(f.name)}());
+		<%}%>
+		return re;
+    }
 
 }

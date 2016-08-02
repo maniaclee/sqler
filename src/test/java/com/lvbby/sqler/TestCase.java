@@ -72,9 +72,19 @@ public class TestCase {
                         TemplateEngineHandler.
                                 of(BeetlTemplateEngine.create(SqlerResource.Beetl_JavaBean.getResourceAsString()))
                                 .bind("className", context -> LeeFn.getEntityClassName(context.getTableInfo()))
+                                .bind("classPack", context -> LeeFn.getEntityPackage(dbConnectorConfig.getPack()))
                                 .addPipeLine(OutputPipeLine.create()
                                         .setDestDir(dbConnectorConfig.calDirectory(LeeFn.getEntityPackage(dbConnectorConfig.getPack())))
                                         .setFileNameConverter(context -> LeeFn.getEntityClassName(context.getTableInfo()))
+                                        .setSuffix("java"))
+                                .addPipeLine(PipeLines.print),
+                        TemplateEngineHandler.
+                                of(BeetlTemplateEngine.create(SqlerResource.Beetl_JavaBean.getResourceAsString()))
+                                .bind("className", context -> LeeFn.getDtoClassName(context.getTableInfo()))
+                                .bind("classPack", context -> LeeFn.getDtoPackage(dbConnectorConfig.getPack()))
+                                .addPipeLine(OutputPipeLine.create()
+                                        .setDestDir(dbConnectorConfig.calDirectory(LeeFn.getDtoPackage(dbConnectorConfig.getPack())))
+                                        .setFileNameConverter(context -> LeeFn.getDtoClassName(context.getTableInfo()))
                                         .setSuffix("java"))
                                 .addPipeLine(PipeLines.print),
                         TemplateEngineHandler.

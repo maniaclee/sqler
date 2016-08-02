@@ -30,7 +30,7 @@ public class LeeFn {
     public static String getEntityClassName(TableInfo c) {
         return c.getName() + "Entity";
     }
-    public static String getDTOPackage(String pack) {
+    public static String getDtoPackage(String pack) {
         return LeeUtil.concatPackage(pack, "dto");
     }
 
