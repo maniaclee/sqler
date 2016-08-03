@@ -1,0 +1,6 @@
+CREATE TABLE ${b.className} (
+	<% for(f in b.fields){ %>
+	${f.name} ${lee.java2jdbcType(f.type)} ${lee.java2jdbcNullable(f.type)?"": "not null"} default ${lee.java2jdbcDefaultValue(f.type)} comment '',
+    <%}%>
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;

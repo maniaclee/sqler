@@ -1,6 +1,11 @@
 package com.lvbby.sqler;
 
+import com.google.common.base.CaseFormat;
 import com.google.common.collect.Lists;
+import com.lvbby.codebot.chain.ContextHandler;
+import com.lvbby.codema.render.TemplateEngineFactory;
+import com.lvbby.sqler.core.Config;
+import com.lvbby.sqler.core.Context;
 import com.lvbby.sqler.core.SqlExecutor;
 import com.lvbby.sqler.factory.DbConnectorConfig;
 import com.lvbby.sqler.factory.JdbcTableFactory;
@@ -10,9 +15,10 @@ import com.lvbby.sqler.handler.TemplateEngineHandler;
 import com.lvbby.sqler.pipeline.OutputPipeLine;
 import com.lvbby.sqler.pipeline.PipeLines;
 import com.lvbby.sqler.render.SqlerResource;
-import com.lvbby.sqler.render.beetl.BeetlTemplateEngine;
 import com.lvbby.sqler.render.beetl.LeeFn;
+import com.lvbby.sqler.util.Apps;
 import com.lvbby.sqler.util.LeeUtil;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.beetl.core.Configuration;
 import org.beetl.core.GroupTemplate;
@@ -21,6 +27,7 @@ import org.beetl.core.resource.ClasspathResourceLoader;
 import org.beetl.core.resource.StringTemplateResourceLoader;
 import org.junit.Test;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -70,7 +77,7 @@ public class TestCase {
                         Handlers.tableCase,
                         Handlers.fieldCase,
                         TemplateEngineHandler.
-                                of(BeetlTemplateEngine.create(SqlerResource.Beetl_JavaBean.getResourceAsString()))
+                                of(TemplateEngineFactory.create(SqlerResource.Beetl_JavaBean.getResourceAsString()))
                                 .bind("className", context -> LeeFn.getEntityClassName(context.getTableInfo()))
                                 .bind("classPack", context -> LeeFn.getEntityPackage(dbConnectorConfig.getPack()))
                                 .addPipeLine(OutputPipeLine.create()
@@ -79,7 +86,7 @@ public class TestCase {
                                         .setSuffix("java"))
                                 .addPipeLine(PipeLines.print),
                         TemplateEngineHandler.
-                                of(BeetlTemplateEngine.create(SqlerResource.Beetl_JavaBean.getResourceAsString()))
+                                of(TemplateEngineFactory.create(SqlerResource.Beetl_JavaBean.getResourceAsString()))
                                 .bind("className", context -> LeeFn.getDtoClassName(context.getTableInfo()))
                                 .bind("classPack", context -> LeeFn.getDtoPackage(dbConnectorConfig.getPack()))
                                 .addPipeLine(OutputPipeLine.create()
@@ -88,21 +95,21 @@ public class TestCase {
                                         .setSuffix("java"))
                                 .addPipeLine(PipeLines.print),
                         TemplateEngineHandler.
-                                of(BeetlTemplateEngine.create(SqlerResource.Beetl_MybatisDao.getResourceAsString()))
+                                of(TemplateEngineFactory.create(SqlerResource.Beetl_MybatisDao.getResourceAsString()))
                                 .addPipeLine(OutputPipeLine.create()
                                         .setDestDir(dbConnectorConfig.calDirectory(LeeFn.getDaoPackage(dbConnectorConfig.getPack())))
                                         .setFileNameConverter(context -> LeeFn.getDaoClassName(context.getTableInfo()))
                                         .setSuffix("java"))
                                 .addPipeLine(PipeLines.print),
                         TemplateEngineHandler.
-                                of(BeetlTemplateEngine.create(SqlerResource.Beetl_Repository.getResourceAsString()))
+                                of(TemplateEngineFactory.create(SqlerResource.Beetl_Repository.getResourceAsString()))
                                 .addPipeLine(OutputPipeLine.create()
                                         .setDestDir(dbConnectorConfig.calDirectory(LeeFn.getRepositoryPackage(dbConnectorConfig.getPack())))
                                         .setFileNameConverter(context -> LeeFn.getRepositoryClassName(context.getTableInfo()))
                                         .setSuffix("java"))
                                 .addPipeLine(PipeLines.print),
                         TemplateEngineHandler.
-                                of(BeetlTemplateEngine.create(SqlerResource.Beetl_MybatisDaoXml.getResourceAsString()))
+                                of(TemplateEngineFactory.create(SqlerResource.Beetl_MybatisDaoXml.getResourceAsString()))
                                 .addPipeLine(OutputPipeLine.create()
                                         .setDestDir(dbConnectorConfig.calDirectory(LeeFn.getMapperXmlPackage(dbConnectorConfig.getPack())))
                                         .setFileNameConverter(context -> LeeFn.getDaoClassName(context.getTableInfo()))
@@ -111,6 +118,18 @@ public class TestCase {
 
                 ));
         sqlExecutor.run();
+    }
+
+    public static ContextHandler<Context> createJavaBeanTemplate(Config dbConnectorConfig, String sufix) {
+        return TemplateEngineHandler.
+                of(TemplateEngineFactory.create(SqlerResource.Beetl_JavaBean.getResourceAsString()))
+                .bind("className", context -> context.getTableInfo() + StringUtils.capitalize(sufix))
+                .bind("classPack", context -> LeeUtil.concatPackage(dbConnectorConfig.getPack(), sufix.toLowerCase()))
+                .addPipeLine(OutputPipeLine.create()
+                        .setDestDir(dbConnectorConfig.calDirectory(LeeFn.getEntityPackage(dbConnectorConfig.getPack())))
+                        .setFileNameConverter(context -> context.getTableInfo() + StringUtils.capitalize(sufix))
+                        .setSuffix("java"))
+                .addPipeLine(PipeLines.print);
     }
 
     private DbConnectorConfig getDbConnectorConfig() {
@@ -152,6 +171,14 @@ public class TestCase {
         LeeUtil.validatePackage("dao");
         System.out.println(StringUtils.isBlank("dao") || "dao".matches("^([a-zA-Z_])[a-zA-Z0-9_\\-\\.]*([^\\.])$"));
         System.out.println("_daoA.a".matches("^([a-zA-Z_])[a-zA-Z0-9_\\-\\.]*([^\\.])$"));
+    }
+
+    @Test
+    public void testCreateTableDdl() throws Exception {
+        String s = "/Users/peng/workspace/github/user/user-biz/src/main/java/com/lvbby/user/entity/UserEntity.java";
+        s = IOUtils.toString(new FileInputStream(s));
+        String re = Apps.genCreateTableDDL(s, CaseFormat.LOWER_UNDERSCORE);
+        System.out.println(re);
     }
 
 
