@@ -24,6 +24,8 @@ public class ${lee.getRepositoryClassName(table)} {
 	}
 
 	public static ${lee.getDtoClassName(table)} convert(${lee.getEntityClassName(table)} src) {
+		if(src==null)
+			return null;
 		${lee.getDtoClassName(table)} re = new ${lee.getDtoClassName(table)}();
 		<% for(f in table.fields){ %>
 		re.set${lee.capital(f.name)}(src.get${lee.capital(f.name)}());
@@ -31,6 +33,8 @@ public class ${lee.getRepositoryClassName(table)} {
 		return re;
     }
 	public static ${lee.getEntityClassName(table)} convert(${lee.getDtoClassName(table)} src) {
+		if(src==null)
+			return null;
 		${lee.getEntityClassName(table)} re = new ${lee.getEntityClassName(table)}();
 		<% for(f in table.fields){ %>
 		re.set${lee.capital(f.name)}(src.get${lee.capital(f.name)}());
