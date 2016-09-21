@@ -8,7 +8,7 @@ import static com.lvbby.sqler.util.LeeUtil.doCheck;
 /**
  * Created by peng on 16/7/27.
  */
-public class DbConnectorConfig extends Config {
+public class JdbcConfig extends Config {
     private static final long serialVersionUID = -4544686755834779084L;
     private String jdbcUrl;
     private String user;

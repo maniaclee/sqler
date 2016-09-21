@@ -5,7 +5,6 @@ import org.apache.commons.lang3.StringUtils;
 import java.io.File;
 import java.io.Serializable;
 
-import static com.lvbby.sqler.util.LeeUtil.doCheck;
 import static com.lvbby.sqler.util.LeeUtil.package2path;
 
 /**
@@ -24,7 +23,7 @@ public class Config implements Checkable, Serializable {
         author = StringUtils.trimToEmpty(author);
         pack = StringUtils.trimToEmpty(pack);
         File file = new File(rootPath);
-        doCheck(file.exists() && file.isDirectory(), "invalid root path : " + rootPath);
+//        doCheck(file.exists() && file.isDirectory(), "invalid root path : " + rootPath);
     }
 
     public File calDirectory(String pack) {

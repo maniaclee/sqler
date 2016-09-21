@@ -2,11 +2,16 @@ package com.lvbby.sqler;
 
 import com.google.common.collect.Lists;
 import com.lvbby.codebot.chain.ContextHandler;
+import com.lvbby.codebot.chain.PipeLine;
 import com.lvbby.codema.render.TemplateEngineFactory;
 import com.lvbby.sqler.core.Config;
 import com.lvbby.sqler.core.Context;
 import com.lvbby.sqler.core.SqlExecutor;
-import com.lvbby.sqler.factory.DbConnectorConfig;
+import com.lvbby.sqler.core.TableFactory;
+import com.lvbby.sqler.exceptions.SqlerException;
+import com.lvbby.sqler.factory.DdlConfig;
+import com.lvbby.sqler.factory.DdlTableFactory;
+import com.lvbby.sqler.factory.JdbcConfig;
 import com.lvbby.sqler.factory.JdbcTableFactory;
 import com.lvbby.sqler.handler.Handlers;
 import com.lvbby.sqler.handler.JavaTypeHandlers;
@@ -15,7 +20,6 @@ import com.lvbby.sqler.pipeline.OutputPipeLine;
 import com.lvbby.sqler.render.SqlerResource;
 import com.lvbby.sqler.render.beetl.LeeFn;
 
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -23,11 +27,12 @@ import java.util.List;
  */
 public class Sqler {
 
+    static String tm_javaBean = SqlerResource.Beetl_JavaBean.getResourceAsString();
+    static String tm_dao = SqlerResource.Beetl_MybatisDao.getResourceAsString();
+    static String tm_repository = SqlerResource.Beetl_Repository.getResourceAsString();
+    static String tm_xml = SqlerResource.Beetl_MybatisDaoXml.getResourceAsString();
+
     public static List<ContextHandler<Context>> getTemplateEngineHandlers(Config dbConnectorConfig) {
-        String tm_javaBean = SqlerResource.Beetl_JavaBean.getResourceAsString();
-        String tm_dao = SqlerResource.Beetl_MybatisDao.getResourceAsString();
-        String tm_repository = SqlerResource.Beetl_Repository.getResourceAsString();
-        String tm_xml = SqlerResource.Beetl_MybatisDaoXml.getResourceAsString();
         return Lists.newArrayList(TemplateEngineHandler.
                         of(TemplateEngineFactory.create(tm_javaBean))
                         .bind("className", context -> LeeFn.getEntityClassName(context.getTableInfo()))
@@ -65,19 +70,46 @@ public class Sqler {
         );
     }
 
-    public static SqlExecutor createSqlExecutorFromDb(DbConnectorConfig config) throws IOException {
+    public static List<ContextHandler<Context>> getTemplateEngineHandlersOnlyPrint(Config dbConnectorConfig) {
+        List<ContextHandler<Context>> templateEngineHandlers = getTemplateEngineHandlers(dbConnectorConfig);
+        templateEngineHandlers.forEach(contextContextHandler -> {
+            PipeLine<String, Context> print = (t, context) -> System.out.println(t);
+            if (contextContextHandler instanceof TemplateEngineHandler) {
+                ((TemplateEngineHandler) contextContextHandler).setPipeLines(Lists.newArrayList(print));
+            }
+        });
+        return templateEngineHandlers;
+
+    }
+
+    public static SqlExecutor createSqlExecutorTemplate(Config config) throws Exception {
+        return createSqlExecutorTemplate(config, createTableFactory(config));
+    }
+
+    public static SqlExecutor createSqlExecutorTemplate(Config config, TableFactory tableFactory) throws Exception {
         config.check();
         return new SqlExecutor()
                 .setConfig(config)
-                .setTableFactory(JdbcTableFactory.create(config))
-                // .setTableFactory(DDLTableFactory.create(IOUtils.toString(TestCase.class.getClassLoader().getResourceAsStream("testddl.sql"))))
+                .setTableFactory(tableFactory)
                 .addContextHandlers(Lists.newArrayList(
                         JavaTypeHandlers.basic,
                         // JavaTypeHandlers.boxingType,
                         Handlers.tableCase,
                         Handlers.fieldCase
-                ))
+                ));
+    }
+
+    public static SqlExecutor createDefaultSqlExecutor(Config config) throws Exception {
+        return createSqlExecutorTemplate(config)
                 .addContextHandlers(getTemplateEngineHandlers(config));
+    }
+
+    public static TableFactory createTableFactory(Config config) {
+        if (config instanceof JdbcConfig)
+            return JdbcTableFactory.create((JdbcConfig) config);
+        if (config instanceof DdlConfig)
+            return DdlTableFactory.create((DdlConfig) config);
+        throw new SqlerException("unknown config type");
     }
 
 }

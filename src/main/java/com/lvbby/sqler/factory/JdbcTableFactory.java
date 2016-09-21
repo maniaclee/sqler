@@ -14,15 +14,15 @@ import java.util.stream.Collectors;
  * Created by peng on 16/7/27.
  */
 public class JdbcTableFactory implements TableFactory {
-    private DbConnectorConfig dbConnectorConfig;
+    private JdbcConfig jdbcConfig;
     Connection conn = null;
 
     private JdbcTableFactory() {
     }
 
-    public static JdbcTableFactory create(DbConnectorConfig dbConnectorConfig) {
+    public static JdbcTableFactory create(JdbcConfig jdbcConfig) {
         JdbcTableFactory re = new JdbcTableFactory();
-        re.dbConnectorConfig = dbConnectorConfig;
+        re.jdbcConfig = jdbcConfig;
         re.init();
         return re;
     }
@@ -63,9 +63,9 @@ public class JdbcTableFactory implements TableFactory {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             conn = DriverManager.getConnection(
-                    dbConnectorConfig.getJdbcUrl(),
-                    dbConnectorConfig.getUser(),
-                    dbConnectorConfig.getPassword());
+                    jdbcConfig.getJdbcUrl(),
+                    jdbcConfig.getUser(),
+                    jdbcConfig.getPassword());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

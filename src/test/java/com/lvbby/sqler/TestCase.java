@@ -6,7 +6,7 @@ import com.lvbby.codebot.chain.ContextHandler;
 import com.lvbby.codema.render.TemplateEngineFactory;
 import com.lvbby.sqler.core.Context;
 import com.lvbby.sqler.core.SqlExecutor;
-import com.lvbby.sqler.factory.DbConnectorConfig;
+import com.lvbby.sqler.factory.JdbcConfig;
 import com.lvbby.sqler.factory.JdbcTableFactory;
 import com.lvbby.sqler.handler.Handlers;
 import com.lvbby.sqler.handler.JavaTypeHandlers;
@@ -65,11 +65,11 @@ public class TestCase {
 
     @Test
     public void casesPipe() throws IOException {
-        DbConnectorConfig dbConnectorConfig = getDbConnectorConfig();
-        dbConnectorConfig.check();
+        JdbcConfig jdbcConfig = getDbConnectorConfig();
+        jdbcConfig.check();
         SqlExecutor sqlExecutor = new SqlExecutor()
-                .setConfig(dbConnectorConfig)
-                .setTableFactory(JdbcTableFactory.create(dbConnectorConfig))
+                .setConfig(jdbcConfig)
+                .setTableFactory(JdbcTableFactory.create(jdbcConfig))
                 // .setTableFactory(DDLTableFactory.create(IOUtils.toString(TestCase.class.getClassLoader().getResourceAsStream("testddl.sql"))))
                 .setContextHandlers(Lists.newArrayList(
                         JavaTypeHandlers.basic,
@@ -79,39 +79,39 @@ public class TestCase {
                         TemplateEngineHandler.
                                 of(TemplateEngineFactory.create(SqlerResource.Beetl_JavaBean.getResourceAsString()))
                                 .bind("className", context -> LeeFn.getEntityClassName(context.getTableInfo()))
-                                .bind("classPack", context -> LeeFn.getEntityPackage(dbConnectorConfig.getPack()))
+                                .bind("classPack", context -> LeeFn.getEntityPackage(jdbcConfig.getPack()))
                                 .addPipeLine(OutputPipeLine.create()
-                                        .setDestDir(dbConnectorConfig.calDirectory(LeeFn.getEntityPackage(dbConnectorConfig.getPack())))
+                                        .setDestDir(jdbcConfig.calDirectory(LeeFn.getEntityPackage(jdbcConfig.getPack())))
                                         .setFileNameConverter(context -> LeeFn.getEntityClassName(context.getTableInfo()))
                                         .setSuffix("java"))
                                 .addPipeLine(PipeLines.print),
                         TemplateEngineHandler.
                                 of(TemplateEngineFactory.create(SqlerResource.Beetl_JavaBean.getResourceAsString()))
                                 .bind("className", context -> LeeFn.getDtoClassName(context.getTableInfo()))
-                                .bind("classPack", context -> LeeFn.getDtoPackage(dbConnectorConfig.getPack()))
+                                .bind("classPack", context -> LeeFn.getDtoPackage(jdbcConfig.getPack()))
                                 .addPipeLine(OutputPipeLine.create()
-                                        .setDestDir(dbConnectorConfig.calDirectory(LeeFn.getDtoPackage(dbConnectorConfig.getPack())))
+                                        .setDestDir(jdbcConfig.calDirectory(LeeFn.getDtoPackage(jdbcConfig.getPack())))
                                         .setFileNameConverter(context -> LeeFn.getDtoClassName(context.getTableInfo()))
                                         .setSuffix("java"))
                                 .addPipeLine(PipeLines.print),
                         TemplateEngineHandler.
                                 of(TemplateEngineFactory.create(SqlerResource.Beetl_MybatisDao.getResourceAsString()))
                                 .addPipeLine(OutputPipeLine.create()
-                                        .setDestDir(dbConnectorConfig.calDirectory(LeeFn.getDaoPackage(dbConnectorConfig.getPack())))
+                                        .setDestDir(jdbcConfig.calDirectory(LeeFn.getDaoPackage(jdbcConfig.getPack())))
                                         .setFileNameConverter(context -> LeeFn.getDaoClassName(context.getTableInfo()))
                                         .setSuffix("java"))
                                 .addPipeLine(PipeLines.print),
                         TemplateEngineHandler.
                                 of(TemplateEngineFactory.create(SqlerResource.Beetl_Repository.getResourceAsString()))
                                 .addPipeLine(OutputPipeLine.create()
-                                        .setDestDir(dbConnectorConfig.calDirectory(LeeFn.getRepositoryPackage(dbConnectorConfig.getPack())))
+                                        .setDestDir(jdbcConfig.calDirectory(LeeFn.getRepositoryPackage(jdbcConfig.getPack())))
                                         .setFileNameConverter(context -> LeeFn.getRepositoryClassName(context.getTableInfo()))
                                         .setSuffix("java"))
                                 .addPipeLine(PipeLines.print),
                         TemplateEngineHandler.
                                 of(TemplateEngineFactory.create(SqlerResource.Beetl_MybatisDaoXml.getResourceAsString()))
                                 .addPipeLine(OutputPipeLine.create()
-                                        .setDestDir(dbConnectorConfig.calDirectory(LeeFn.getMapperXmlPackage(dbConnectorConfig.getPack())))
+                                        .setDestDir(jdbcConfig.calDirectory(LeeFn.getMapperXmlPackage(jdbcConfig.getPack())))
                                         .setFileNameConverter(context -> LeeFn.getDaoClassName(context.getTableInfo()))
                                         .setSuffix("xml"))
                                 .addPipeLine(PipeLines.print)
@@ -120,59 +120,59 @@ public class TestCase {
         sqlExecutor.run();
     }
 
-    public static List<ContextHandler<Context>> getTemplateEngineHandlers(DbConnectorConfig dbConnectorConfig) {
+    public static List<ContextHandler<Context>> getTemplateEngineHandlers(JdbcConfig jdbcConfig) {
         return Lists.newArrayList(TemplateEngineHandler.
                         of(TemplateEngineFactory.create(SqlerResource.Beetl_JavaBean.getResourceAsString()))
                         .bind("className", context -> LeeFn.getEntityClassName(context.getTableInfo()))
-                        .bind("classPack", context -> LeeFn.getEntityPackage(dbConnectorConfig.getPack()))
+                        .bind("classPack", context -> LeeFn.getEntityPackage(jdbcConfig.getPack()))
                         .addPipeLine(OutputPipeLine.create()
-                                .setDestDir(dbConnectorConfig.calDirectory(LeeFn.getEntityPackage(dbConnectorConfig.getPack())))
+                                .setDestDir(jdbcConfig.calDirectory(LeeFn.getEntityPackage(jdbcConfig.getPack())))
                                 .setFileNameConverter(context -> LeeFn.getEntityClassName(context.getTableInfo()))
                                 .setSuffix("java"))
                         .addPipeLine(PipeLines.print),
                 TemplateEngineHandler.
                         of(TemplateEngineFactory.create(SqlerResource.Beetl_JavaBean.getResourceAsString()))
                         .bind("className", context -> LeeFn.getDtoClassName(context.getTableInfo()))
-                        .bind("classPack", context -> LeeFn.getDtoPackage(dbConnectorConfig.getPack()))
+                        .bind("classPack", context -> LeeFn.getDtoPackage(jdbcConfig.getPack()))
                         .addPipeLine(OutputPipeLine.create()
-                                .setDestDir(dbConnectorConfig.calDirectory(LeeFn.getDtoPackage(dbConnectorConfig.getPack())))
+                                .setDestDir(jdbcConfig.calDirectory(LeeFn.getDtoPackage(jdbcConfig.getPack())))
                                 .setFileNameConverter(context -> LeeFn.getDtoClassName(context.getTableInfo()))
                                 .setSuffix("java"))
                         .addPipeLine(PipeLines.print),
                 TemplateEngineHandler.
                         of(TemplateEngineFactory.create(SqlerResource.Beetl_MybatisDao.getResourceAsString()))
                         .addPipeLine(OutputPipeLine.create()
-                                .setDestDir(dbConnectorConfig.calDirectory(LeeFn.getDaoPackage(dbConnectorConfig.getPack())))
+                                .setDestDir(jdbcConfig.calDirectory(LeeFn.getDaoPackage(jdbcConfig.getPack())))
                                 .setFileNameConverter(context -> LeeFn.getDaoClassName(context.getTableInfo()))
                                 .setSuffix("java"))
                         .addPipeLine(PipeLines.print),
                 TemplateEngineHandler.
                         of(TemplateEngineFactory.create(SqlerResource.Beetl_Repository.getResourceAsString()))
                         .addPipeLine(OutputPipeLine.create()
-                                .setDestDir(dbConnectorConfig.calDirectory(LeeFn.getRepositoryPackage(dbConnectorConfig.getPack())))
+                                .setDestDir(jdbcConfig.calDirectory(LeeFn.getRepositoryPackage(jdbcConfig.getPack())))
                                 .setFileNameConverter(context -> LeeFn.getRepositoryClassName(context.getTableInfo()))
                                 .setSuffix("java"))
                         .addPipeLine(PipeLines.print),
                 TemplateEngineHandler.
                         of(TemplateEngineFactory.create(SqlerResource.Beetl_MybatisDaoXml.getResourceAsString()))
                         .addPipeLine(OutputPipeLine.create()
-                                .setDestDir(dbConnectorConfig.calDirectory(LeeFn.getMapperXmlPackage(dbConnectorConfig.getPack())))
+                                .setDestDir(jdbcConfig.calDirectory(LeeFn.getMapperXmlPackage(jdbcConfig.getPack())))
                                 .setFileNameConverter(context -> LeeFn.getDaoClassName(context.getTableInfo()))
                                 .setSuffix("xml"))
                         .addPipeLine(PipeLines.print));
     }
 
 
-    private DbConnectorConfig getDbConnectorConfig() {
-        DbConnectorConfig dbConnectorConfig = new DbConnectorConfig();
-        dbConnectorConfig.setJdbcUrl("jdbc:mysql://localhost:3306/user");
-        dbConnectorConfig.setUser("root");
-        dbConnectorConfig.setPassword("");
-        dbConnectorConfig.setAuthor("lipeng");
-        dbConnectorConfig.setPack("com.lvbby.user");
+    private JdbcConfig getDbConnectorConfig() {
+        JdbcConfig jdbcConfig = new JdbcConfig();
+        jdbcConfig.setJdbcUrl("jdbc:mysql://localhost:3306/user");
+        jdbcConfig.setUser("root");
+        jdbcConfig.setPassword("");
+        jdbcConfig.setAuthor("lipeng");
+        jdbcConfig.setPack("com.lvbby.user");
         // dbConnectorConfig.setRootPath("/Users/psyco/workspace/github/user/user-biz/src/main/java");
-        dbConnectorConfig.setRootPath("/Users/peng/workspace/github/user/user-biz/src/main/java");
-        return dbConnectorConfig;
+        jdbcConfig.setRootPath("/Users/peng/workspace/github/user/user-biz/src/main/java");
+        return jdbcConfig;
     }
 
     @Test
@@ -212,5 +212,12 @@ public class TestCase {
         System.out.println(re);
     }
 
+    @Test
+    public void testSqler() throws Exception {
+        JdbcConfig dbConnectorConfig = getDbConnectorConfig();
+        Sqler.createSqlExecutorTemplate(dbConnectorConfig)
+                .addContextHandlers(Sqler.getTemplateEngineHandlersOnlyPrint(dbConnectorConfig))
+                .run();
+    }
 
 }

@@ -12,15 +12,21 @@ import java.util.regex.Pattern;
 /**
  * Created by peng on 16/7/28.
  */
-public class DDLTableFactory implements TableFactory {
+public class DdlTableFactory implements TableFactory {
     static Pattern p_table = Pattern.compile("\\s*CREATE\\s+TABLE\\s+`(?<table>\\S+)`\\s*\\((?<body>[^;]+);", Pattern.CASE_INSENSITIVE);
     static Pattern p_sentence = Pattern.compile("\\s*`(?<field>\\S+)`\\s+(?<type>[^\\(\\)\\s]+)[^,]+,", Pattern.CASE_INSENSITIVE);
     static Pattern p_pk = Pattern.compile("PRIMARY\\s+KEY\\s*\\(\\s*`(?<pk>\\S+)`\\s*\\)", Pattern.CASE_INSENSITIVE);
     private String ddl;
 
-    public static DDLTableFactory create(String ddl) {
-        DDLTableFactory re = new DDLTableFactory();
+    public static DdlTableFactory create(String ddl) {
+        DdlTableFactory re = new DdlTableFactory();
         re.ddl = ddl;
+        return re;
+    }
+
+    public static DdlTableFactory create(DdlConfig ddl) {
+        DdlTableFactory re = new DdlTableFactory();
+        re.ddl = ddl.getDdl();
         return re;
     }
 
