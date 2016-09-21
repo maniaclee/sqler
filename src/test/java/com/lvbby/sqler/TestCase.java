@@ -4,7 +4,6 @@ import com.google.common.base.CaseFormat;
 import com.google.common.collect.Lists;
 import com.lvbby.codebot.chain.ContextHandler;
 import com.lvbby.codema.render.TemplateEngineFactory;
-import com.lvbby.sqler.core.Config;
 import com.lvbby.sqler.core.Context;
 import com.lvbby.sqler.core.SqlExecutor;
 import com.lvbby.sqler.factory.DbConnectorConfig;
@@ -33,6 +32,7 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.util.List;
 
 /**
  * Created by lipeng on 16/7/28.
@@ -120,17 +120,48 @@ public class TestCase {
         sqlExecutor.run();
     }
 
-    public static ContextHandler<Context> createJavaBeanTemplate(Config dbConnectorConfig, String sufix) {
-        return TemplateEngineHandler.
-                of(TemplateEngineFactory.create(SqlerResource.Beetl_JavaBean.getResourceAsString()))
-                .bind("className", context -> context.getTableInfo() + StringUtils.capitalize(sufix))
-                .bind("classPack", context -> LeeUtil.concatPackage(dbConnectorConfig.getPack(), sufix.toLowerCase()))
-                .addPipeLine(OutputPipeLine.create()
-                        .setDestDir(dbConnectorConfig.calDirectory(LeeFn.getEntityPackage(dbConnectorConfig.getPack())))
-                        .setFileNameConverter(context -> context.getTableInfo() + StringUtils.capitalize(sufix))
-                        .setSuffix("java"))
-                .addPipeLine(PipeLines.print);
+    public static List<ContextHandler<Context>> getTemplateEngineHandlers(DbConnectorConfig dbConnectorConfig) {
+        return Lists.newArrayList(TemplateEngineHandler.
+                        of(TemplateEngineFactory.create(SqlerResource.Beetl_JavaBean.getResourceAsString()))
+                        .bind("className", context -> LeeFn.getEntityClassName(context.getTableInfo()))
+                        .bind("classPack", context -> LeeFn.getEntityPackage(dbConnectorConfig.getPack()))
+                        .addPipeLine(OutputPipeLine.create()
+                                .setDestDir(dbConnectorConfig.calDirectory(LeeFn.getEntityPackage(dbConnectorConfig.getPack())))
+                                .setFileNameConverter(context -> LeeFn.getEntityClassName(context.getTableInfo()))
+                                .setSuffix("java"))
+                        .addPipeLine(PipeLines.print),
+                TemplateEngineHandler.
+                        of(TemplateEngineFactory.create(SqlerResource.Beetl_JavaBean.getResourceAsString()))
+                        .bind("className", context -> LeeFn.getDtoClassName(context.getTableInfo()))
+                        .bind("classPack", context -> LeeFn.getDtoPackage(dbConnectorConfig.getPack()))
+                        .addPipeLine(OutputPipeLine.create()
+                                .setDestDir(dbConnectorConfig.calDirectory(LeeFn.getDtoPackage(dbConnectorConfig.getPack())))
+                                .setFileNameConverter(context -> LeeFn.getDtoClassName(context.getTableInfo()))
+                                .setSuffix("java"))
+                        .addPipeLine(PipeLines.print),
+                TemplateEngineHandler.
+                        of(TemplateEngineFactory.create(SqlerResource.Beetl_MybatisDao.getResourceAsString()))
+                        .addPipeLine(OutputPipeLine.create()
+                                .setDestDir(dbConnectorConfig.calDirectory(LeeFn.getDaoPackage(dbConnectorConfig.getPack())))
+                                .setFileNameConverter(context -> LeeFn.getDaoClassName(context.getTableInfo()))
+                                .setSuffix("java"))
+                        .addPipeLine(PipeLines.print),
+                TemplateEngineHandler.
+                        of(TemplateEngineFactory.create(SqlerResource.Beetl_Repository.getResourceAsString()))
+                        .addPipeLine(OutputPipeLine.create()
+                                .setDestDir(dbConnectorConfig.calDirectory(LeeFn.getRepositoryPackage(dbConnectorConfig.getPack())))
+                                .setFileNameConverter(context -> LeeFn.getRepositoryClassName(context.getTableInfo()))
+                                .setSuffix("java"))
+                        .addPipeLine(PipeLines.print),
+                TemplateEngineHandler.
+                        of(TemplateEngineFactory.create(SqlerResource.Beetl_MybatisDaoXml.getResourceAsString()))
+                        .addPipeLine(OutputPipeLine.create()
+                                .setDestDir(dbConnectorConfig.calDirectory(LeeFn.getMapperXmlPackage(dbConnectorConfig.getPack())))
+                                .setFileNameConverter(context -> LeeFn.getDaoClassName(context.getTableInfo()))
+                                .setSuffix("xml"))
+                        .addPipeLine(PipeLines.print));
     }
+
 
     private DbConnectorConfig getDbConnectorConfig() {
         DbConnectorConfig dbConnectorConfig = new DbConnectorConfig();

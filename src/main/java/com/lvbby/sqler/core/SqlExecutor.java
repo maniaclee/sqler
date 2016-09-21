@@ -1,5 +1,6 @@
 package com.lvbby.sqler.core;
 
+import com.google.common.collect.Lists;
 import com.lvbby.codebot.chain.ChainExecutor;
 import com.lvbby.codebot.chain.ContextHandler;
 import org.apache.commons.collections.CollectionUtils;
@@ -39,19 +40,6 @@ public class SqlExecutor implements Checkable {
         }).forEach(context -> exec.exec(context));
     }
 
-    @Deprecated
-    private void exec(ContextHandler contextHandler, Context context) {
-        contextHandler.handle(context);
-        if (contextHandler instanceof HierarchyContextHandler) {
-            HierarchyContextHandler h = (HierarchyContextHandler) contextHandler;
-            if (CollectionUtils.isNotEmpty(h.getChildren()))
-                h.getChildren().stream().
-                        filter(o -> o instanceof ContextHandler)
-                        .forEach(o -> exec(contextHandler, context));
-        }
-
-    }
-
     public Config getConfig() {
         return config;
     }
@@ -76,6 +64,20 @@ public class SqlExecutor implements Checkable {
 
     public SqlExecutor setContextHandlers(List<ContextHandler<Context>> contextHandlers) {
         this.contextHandlers = contextHandlers;
+        return this;
+    }
+
+    public SqlExecutor addContextHandlers(List<ContextHandler<Context>> contextHandlers) {
+        if (this.contextHandlers == null)
+            this.contextHandlers = Lists.newLinkedList();
+        this.contextHandlers.addAll(contextHandlers);
+        return this;
+    }
+
+    public SqlExecutor addContextHandler(ContextHandler<Context> contextHandler) {
+        if (this.contextHandlers == null)
+            this.contextHandlers = Lists.newLinkedList();
+        this.contextHandlers.add(contextHandler);
         return this;
     }
 
