@@ -19,6 +19,7 @@ import com.lvbby.sqler.handler.TemplateEngineHandler;
 import com.lvbby.sqler.pipeline.OutputPipeLine;
 import com.lvbby.sqler.render.SqlerResource;
 import com.lvbby.sqler.render.beetl.LeeFn;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 
@@ -110,6 +111,20 @@ public class Sqler {
         if (config instanceof DdlConfig)
             return DdlTableFactory.create((DdlConfig) config);
         throw new SqlerException("unknown config type");
+    }
+
+    public static void main(String[] args) {
+        if (args.length < 2) {
+            System.out.println("usage: type[jdbc|ddl] configFile");
+            return;
+        }
+        String type = StringUtils.trimToEmpty(args[1]);
+        String file = StringUtils.trimToEmpty(args[2]);
+        if (StringUtils.isBlank(file)) {
+            System.out.println("config file is empty");
+            return;
+        }
+
     }
 
 }
