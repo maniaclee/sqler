@@ -1,17 +1,18 @@
 package com.lvbby.sqler.handler;
 
 import com.google.common.collect.Maps;
-import com.lvbby.sqler.core.Context;
-import com.lvbby.sqler.core.ContextConverter;
+import com.lvbby.codebot.chain.ContextTask;
 import com.lvbby.codebot.chain.ContextTaskPipedHandler;
 import com.lvbby.codema.render.TemplateEngine;
+import com.lvbby.sqler.core.Context;
+import com.lvbby.sqler.core.ContextConverter;
 
 import java.util.Map;
 
 /**
  * Created by lipeng on 16/7/28.
  */
-public class TemplateEngineHandler extends ContextTaskPipedHandler<Context,String> {
+public class TemplateEngineHandler implements ContextTask<Context, String> {
     private TemplateEngine templateEngine;
     private Map<String, ContextConverter> handlerMap = Maps.newHashMap();
 
@@ -28,7 +29,7 @@ public class TemplateEngineHandler extends ContextTaskPipedHandler<Context,Strin
 
 
     @Override
-    public String doProcess(Context context) {
+    public String process(Context context) {
         templateEngine.bind("config", context.getConfig());
         templateEngine.bind("table", context.getTableInfo());
         handlerMap.forEach((k, v) -> {
@@ -37,4 +38,9 @@ public class TemplateEngineHandler extends ContextTaskPipedHandler<Context,Strin
         });
         return templateEngine.render();
     }
+
+    public ContextTaskPipedHandler toPipeLine() {
+        return new ContextTaskPipedHandler(this);
+    }
+
 }

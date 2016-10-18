@@ -80,6 +80,7 @@ public class TestCase {
                                 of(TemplateEngineFactory.create(SqlerResource.Beetl_JavaBean.getResourceAsString()))
                                 .bind("className", context -> LeeFn.getEntityClassName(context.getTableInfo()))
                                 .bind("classPack", context -> LeeFn.getEntityPackage(jdbcConfig.getPack()))
+                                .toPipeLine()
                                 .addPipeLine(OutputPipeLine.create()
                                         .setDestDir(jdbcConfig.calDirectory(LeeFn.getEntityPackage(jdbcConfig.getPack())))
                                         .setFileNameConverter(context -> LeeFn.getEntityClassName(context.getTableInfo()))
@@ -89,6 +90,7 @@ public class TestCase {
                                 of(TemplateEngineFactory.create(SqlerResource.Beetl_JavaBean.getResourceAsString()))
                                 .bind("className", context -> LeeFn.getDtoClassName(context.getTableInfo()))
                                 .bind("classPack", context -> LeeFn.getDtoPackage(jdbcConfig.getPack()))
+                                .toPipeLine()
                                 .addPipeLine(OutputPipeLine.create()
                                         .setDestDir(jdbcConfig.calDirectory(LeeFn.getDtoPackage(jdbcConfig.getPack())))
                                         .setFileNameConverter(context -> LeeFn.getDtoClassName(context.getTableInfo()))
@@ -96,6 +98,7 @@ public class TestCase {
                                 .addPipeLine(PipeLines.print),
                         TemplateEngineHandler.
                                 of(TemplateEngineFactory.create(SqlerResource.Beetl_MybatisDao.getResourceAsString()))
+                                .toPipeLine()
                                 .addPipeLine(OutputPipeLine.create()
                                         .setDestDir(jdbcConfig.calDirectory(LeeFn.getDaoPackage(jdbcConfig.getPack())))
                                         .setFileNameConverter(context -> LeeFn.getDaoClassName(context.getTableInfo()))
@@ -103,6 +106,7 @@ public class TestCase {
                                 .addPipeLine(PipeLines.print),
                         TemplateEngineHandler.
                                 of(TemplateEngineFactory.create(SqlerResource.Beetl_Repository.getResourceAsString()))
+                                .toPipeLine()
                                 .addPipeLine(OutputPipeLine.create()
                                         .setDestDir(jdbcConfig.calDirectory(LeeFn.getRepositoryPackage(jdbcConfig.getPack())))
                                         .setFileNameConverter(context -> LeeFn.getRepositoryClassName(context.getTableInfo()))
@@ -110,6 +114,7 @@ public class TestCase {
                                 .addPipeLine(PipeLines.print),
                         TemplateEngineHandler.
                                 of(TemplateEngineFactory.create(SqlerResource.Beetl_MybatisDaoXml.getResourceAsString()))
+                                .toPipeLine()
                                 .addPipeLine(OutputPipeLine.create()
                                         .setDestDir(jdbcConfig.calDirectory(LeeFn.getMapperXmlPackage(jdbcConfig.getPack())))
                                         .setFileNameConverter(context -> LeeFn.getDaoClassName(context.getTableInfo()))
@@ -125,6 +130,7 @@ public class TestCase {
                         of(TemplateEngineFactory.create(SqlerResource.Beetl_JavaBean.getResourceAsString()))
                         .bind("className", context -> LeeFn.getEntityClassName(context.getTableInfo()))
                         .bind("classPack", context -> LeeFn.getEntityPackage(jdbcConfig.getPack()))
+                        .toPipeLine()
                         .addPipeLine(OutputPipeLine.create()
                                 .setDestDir(jdbcConfig.calDirectory(LeeFn.getEntityPackage(jdbcConfig.getPack())))
                                 .setFileNameConverter(context -> LeeFn.getEntityClassName(context.getTableInfo()))
@@ -134,6 +140,7 @@ public class TestCase {
                         of(TemplateEngineFactory.create(SqlerResource.Beetl_JavaBean.getResourceAsString()))
                         .bind("className", context -> LeeFn.getDtoClassName(context.getTableInfo()))
                         .bind("classPack", context -> LeeFn.getDtoPackage(jdbcConfig.getPack()))
+                        .toPipeLine()
                         .addPipeLine(OutputPipeLine.create()
                                 .setDestDir(jdbcConfig.calDirectory(LeeFn.getDtoPackage(jdbcConfig.getPack())))
                                 .setFileNameConverter(context -> LeeFn.getDtoClassName(context.getTableInfo()))
@@ -141,6 +148,7 @@ public class TestCase {
                         .addPipeLine(PipeLines.print),
                 TemplateEngineHandler.
                         of(TemplateEngineFactory.create(SqlerResource.Beetl_MybatisDao.getResourceAsString()))
+                        .toPipeLine()
                         .addPipeLine(OutputPipeLine.create()
                                 .setDestDir(jdbcConfig.calDirectory(LeeFn.getDaoPackage(jdbcConfig.getPack())))
                                 .setFileNameConverter(context -> LeeFn.getDaoClassName(context.getTableInfo()))
@@ -148,6 +156,7 @@ public class TestCase {
                         .addPipeLine(PipeLines.print),
                 TemplateEngineHandler.
                         of(TemplateEngineFactory.create(SqlerResource.Beetl_Repository.getResourceAsString()))
+                        .toPipeLine()
                         .addPipeLine(OutputPipeLine.create()
                                 .setDestDir(jdbcConfig.calDirectory(LeeFn.getRepositoryPackage(jdbcConfig.getPack())))
                                 .setFileNameConverter(context -> LeeFn.getRepositoryClassName(context.getTableInfo()))
@@ -155,6 +164,7 @@ public class TestCase {
                         .addPipeLine(PipeLines.print),
                 TemplateEngineHandler.
                         of(TemplateEngineFactory.create(SqlerResource.Beetl_MybatisDaoXml.getResourceAsString()))
+                        .toPipeLine()
                         .addPipeLine(OutputPipeLine.create()
                                 .setDestDir(jdbcConfig.calDirectory(LeeFn.getMapperXmlPackage(jdbcConfig.getPack())))
                                 .setFileNameConverter(context -> LeeFn.getDaoClassName(context.getTableInfo()))
@@ -165,13 +175,13 @@ public class TestCase {
 
     private JdbcConfig getDbConnectorConfig() {
         JdbcConfig jdbcConfig = new JdbcConfig();
-        jdbcConfig.setJdbcUrl("jdbc:mysql://localhost:3306/user");
+        jdbcConfig.setJdbcUrl("jdbc:mysql://localhost:3306/lvbby");
         jdbcConfig.setUser("root");
         jdbcConfig.setPassword("");
         jdbcConfig.setAuthor("lipeng");
-        jdbcConfig.setPack("com.lvbby.user");
+        jdbcConfig.setPack("com.lvbby.garfield.test");
         // dbConnectorConfig.setRootPath("/Users/psyco/workspace/github/user/user-biz/src/main/java");
-        jdbcConfig.setRootPath("/Users/peng/workspace/github/user/user-biz/src/main/java");
+        jdbcConfig.setRootPath("/Users/psyco/workspace/coding/garfield/garfield-biz/src/main/java");
         return jdbcConfig;
     }
 
