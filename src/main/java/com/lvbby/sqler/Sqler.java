@@ -38,7 +38,7 @@ public class Sqler {
                         of(TemplateEngineFactory.create(tm_javaBean))
                         .bind("className", context -> LeeFn.getEntityClassName(context.getTableInfo()))
                         .bind("classPack", context -> LeeFn.getEntityPackage(dbConnectorConfig.getPack()))
-                        .addPipeLine(OutputPipeLine.create()
+                        .toPipeLine().addPipeLine(OutputPipeLine.create()
                                 .setDestDir(dbConnectorConfig.calDirectory(LeeFn.getEntityPackage(dbConnectorConfig.getPack())))
                                 .setFileNameConverter(context -> LeeFn.getEntityClassName(context.getTableInfo()))
                                 .setSuffix("java")),
@@ -46,25 +46,25 @@ public class Sqler {
                         of(TemplateEngineFactory.create(tm_javaBean))
                         .bind("className", context -> LeeFn.getDtoClassName(context.getTableInfo()))
                         .bind("classPack", context -> LeeFn.getDtoPackage(dbConnectorConfig.getPack()))
-                        .addPipeLine(OutputPipeLine.create()
+                        .toPipeLine().addPipeLine(OutputPipeLine.create()
                                 .setDestDir(dbConnectorConfig.calDirectory(LeeFn.getDtoPackage(dbConnectorConfig.getPack())))
                                 .setFileNameConverter(context -> LeeFn.getDtoClassName(context.getTableInfo()))
                                 .setSuffix("java")),
                 TemplateEngineHandler.
                         of(TemplateEngineFactory.create(tm_dao))
-                        .addPipeLine(OutputPipeLine.create()
+                        .toPipeLine().addPipeLine(OutputPipeLine.create()
                                 .setDestDir(dbConnectorConfig.calDirectory(LeeFn.getDaoPackage(dbConnectorConfig.getPack())))
                                 .setFileNameConverter(context -> LeeFn.getDaoClassName(context.getTableInfo()))
                                 .setSuffix("java")),
                 TemplateEngineHandler.
                         of(TemplateEngineFactory.create(tm_repository))
-                        .addPipeLine(OutputPipeLine.create()
+                        .toPipeLine().addPipeLine(OutputPipeLine.create()
                                 .setDestDir(dbConnectorConfig.calDirectory(LeeFn.getRepositoryPackage(dbConnectorConfig.getPack())))
                                 .setFileNameConverter(context -> LeeFn.getRepositoryClassName(context.getTableInfo()))
                                 .setSuffix("java")),
                 TemplateEngineHandler.
                         of(TemplateEngineFactory.create(tm_xml))
-                        .addPipeLine(OutputPipeLine.create()
+                        .toPipeLine().addPipeLine(OutputPipeLine.create()
                                 .setDestDir(dbConnectorConfig.calDirectory(LeeFn.getMapperXmlPackage(dbConnectorConfig.getPack())))
                                 .setFileNameConverter(context -> LeeFn.getDaoClassName(context.getTableInfo()))
                                 .setSuffix("xml"))
@@ -76,7 +76,7 @@ public class Sqler {
         templateEngineHandlers.forEach(contextContextHandler -> {
             PipeLine<String, Context> print = (t, context) -> System.out.println(t);
             if (contextContextHandler instanceof TemplateEngineHandler) {
-                ((TemplateEngineHandler) contextContextHandler).setPipeLines(Lists.newArrayList(print));
+                ((TemplateEngineHandler) contextContextHandler).toPipeLine().setPipeLines(Lists.newArrayList(print));
             }
         });
         return templateEngineHandlers;
